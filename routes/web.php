@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  return redirect('/login');
 });
+
+Route::group(['middleware' => ["no.cache", "redireccionar.autenticado"]], function () {
+  Route::get('/login', function () {
+    return view('login.Login');
+  })->name("loginAdministrativo");
+});
+
+Route::post('/auth/login', [AuthController::class, 'authenticate'])->name("auth.login");

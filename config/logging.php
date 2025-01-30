@@ -113,8 +113,10 @@ return [
         ],
 
         'errorlog' => [
-            'driver' => 'errorlog',
+            'driver' => 'daily',
+            'path' => storage_path('logs/errorsBiblioteca.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 10,
             'replace_placeholders' => true,
         ],
 
