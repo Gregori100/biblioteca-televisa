@@ -91,16 +91,6 @@ class UsuarioService
   }
 
   /**
-   * Service que lista las fotografias activas de 1 usuario
-   * @param string $usuarioId
-   * @return array
-   */
-  public static function listarUsuariosFotografias($usuarioId)
-  {
-    return UsuarioRepoData::listarUsuariosFotografias($usuarioId);
-  }
-
-  /**
    * Método que autentica un usuario
    * @param string $usuario
    * @param string $password
@@ -235,9 +225,6 @@ class UsuarioService
     if ($validarStatus && $usuarioObj->getStatus() != UsuarioConst::USUARIO_STATUS_ACTIVO) {
       throw new Exception("El usuario seleccionado ha cambiado de status, favor de recargar la página.", 300);
     }
-
-    // Se coloca la ruta de la fotografia del usuario
-    $usuarioObj->setRutaFotografiaArchivo(self::obtenerRutaFotografiaArchivo($usuarioId));
 
     return $usuarioObj;
   }
@@ -424,7 +411,6 @@ class UsuarioService
     $usuarioActualizadoObj->permisos = json_encode(array_map(function ($permiso) {
       return $permiso->codigo;
     }, PermisoService::listarPorUsuario($usuarioEditadoId)));
-    $usuarioActualizadoObj->rutaImgUsuarioLogeado = UsuarioService::obtenerRutaFotografiaArchivo($usuarioActualizadoObj->usuario_id);
 
     // Se limpia el prefijo del proyecto
     $keys = RedisBO::limpiarPrefijoKeys($keys);
@@ -433,22 +419,6 @@ class UsuarioService
       // Se sobre escribe token en redis
       Redis::setex($key, RedisConst::TTL_DEFAULT, json_encode($usuarioActualizadoObj));
     }
-  }
-
-  /**
-   * Service que edita la fotografia de un articulo
-   * @param array $datos
-   * @return string
-   */
-  public static function editarImagen(array $datos)
-  {
-    // Actualizamos los anteriores
-    UsuarioRepoAction::editarUsuariosFotografias($datos);
-
-    $insert = UsuarioBO::armarInsertFotografiaUsuario($datos);
-    UsuarioRepoAction::agregarUsuariosFotografias($insert);
-
-    return $insert["nombre_sistema"];
   }
 
   /**
@@ -475,29 +445,6 @@ class UsuarioService
     StorageService::subirSinCarpetaFecha([$archivo]);
 
     unlink($tempFilePath);
-  }
-
-  /**
-   * Método que obtiene la ruta del api para obtener la fotografía del articulo
-   * @param string $usuarioId
-   * @param string $folio
-   * @return mixed
-   */
-  public static function obtenerRutaFotografiaArchivo($usuarioId)
-  {
-    $usuarioFotografias = self::listarUsuariosFotografias($usuarioId);
-
-    if (!empty($usuarioFotografias)) {
-      $urlImagen  = ArchivoConst::RUTA_API_ARCHIVOS . "/" . $usuarioFotografias[0]->nombre_sistema; // Nombre archivo
-      $urlImagen .= "?path=" . $usuarioId . "/"; // Path en s3
-      $urlImagen .= "&extension=" . $usuarioFotografias[0]->extension;
-      $urlImagen .= "&tipoArchivo=" . TipoArchivoConst::USUARIOS; // Subfolder anterior del path en s3
-      $urlImagen .= "&cache=1";
-
-      return $urlImagen;
-    }
-
-    return null;
   }
 
   /********************************************************************/

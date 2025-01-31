@@ -26,8 +26,4 @@ class UsuarioConst
   // Rel Sucursal Usuario
   const REL_SUCURSAL_USUARIO_ACTIVO   = 200;
   const REL_SUCURSAL_USUARIO_INACTIVO = 300;
-
-  // Status fotografias usuario
-  const USUARIO_FOTOGRAFIA_STATUS_ACTIVO    = 200;
-  const USUARIO_FOTOGRAFIA_STATUS_ELIMINADO = 300;
 }

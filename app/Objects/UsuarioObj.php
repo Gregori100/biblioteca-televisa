@@ -29,7 +29,6 @@ class UsuarioObj
   private $perfilId;
   private $registroAutor;
   private $actualizacionAutor;
-  private $rutaFotografiaArchivo;
 
   /****************************************/
   /**************** Getters ***************/
@@ -110,10 +109,6 @@ class UsuarioObj
   {
     return $this->actualizacionAutor;
   }
-  public function getRutaFotografiaArchivo()
-  {
-    return $this->rutaFotografiaArchivo;
-  }
 
   /****************************************/
   /**************** Setters ***************/
@@ -193,10 +188,6 @@ class UsuarioObj
   public function setActualizacionAutor($actualizacionAutor)
   {
     $this->actualizacionAutor = $actualizacionAutor;
-  }
-  public function setRutaFotografiaArchivo($rutaFotografiaArchivo)
-  {
-    $this->rutaFotografiaArchivo = $rutaFotografiaArchivo;
   }
 
   /****************************************/

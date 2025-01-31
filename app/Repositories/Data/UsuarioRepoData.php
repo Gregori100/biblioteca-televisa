@@ -191,31 +191,4 @@ class UsuarioRepoData
 
     return $query->get()->toArray();
   }
-
-  /**
-   * Repo para obtener fotografias de articulos
-   * @param string $usuarioId
-   * @return array
-   */
-  public static function listarUsuariosFotografias($usuarioId)
-  {
-    $query = DB::table('usuarios_fotografias AS uf')
-      ->select(
-        "uf.usuario_fotografia_id",
-        "uf.usuario_id",
-        "uf.nombre_sistema",
-        "uf.nombre_anterior",
-        "uf.extension",
-        "uf.tamano_kilobytes",
-        "uf.status",
-        "uf.registro_autor_id",
-        "uf.registro_fecha",
-        "uf.actualizacion_autor_id",
-        "uf.actualizacion_fecha",
-      )
-      ->where('uf.usuario_id', $usuarioId)
-      ->where('uf.status', UsuarioConst::USUARIO_FOTOGRAFIA_STATUS_ACTIVO);
-
-    return $query->get()->toArray();
-  }
 }

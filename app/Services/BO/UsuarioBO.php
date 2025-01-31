@@ -194,28 +194,4 @@ class UsuarioBO
 
     return $update;
   }
-
-  /**
-   * Método que arma insert de una fotografia de un articulo
-   * @param array $datos
-   * @return array $insert
-   */
-  public static function armarInsertFotografiaUsuario(array $datos)
-  {
-    $insert = [];
-
-    $nombreSistema = $datos["usuarioEditadoId"] . "-" . Carbon::parse(FechaUtils::fechaActual())->format('Ymd-His');
-
-    $insert["usuario_id"]        = $datos["usuarioEditadoId"];
-    $insert["nombre_sistema"]    = $nombreSistema;
-    $insert["nombre_anterior"]   = pathinfo($datos["nombreImagen"], PATHINFO_FILENAME);
-    // $insert["extension"]         = pathinfo($datos["nombreImagen"], PATHINFO_EXTENSION);
-    $insert["extension"]         = "png";
-    $insert["tamano_kilobytes"]  = $datos["tamanioKB"];
-    $insert["status"]            = UsuarioConst::USUARIO_FOTOGRAFIA_STATUS_ACTIVO;
-    $insert["registro_autor_id"] = $datos["usuarioId"];
-    $insert["registro_fecha"]    = FechaUtils::fechaActual();
-
-    return $insert;
-  }
 }

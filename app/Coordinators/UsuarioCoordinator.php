@@ -37,7 +37,6 @@ class UsuarioCoordinator
     $usuarioObj->permisos = json_encode(array_map(function ($permiso) {
       return $permiso->codigo;
     }, PermisoService::listarPorUsuario($usuarioObj->usuario_id)));
-    $usuarioObj->rutaImgUsuarioLogeado = UsuarioService::obtenerRutaFotografiaArchivo($usuarioObj->usuario_id);
 
     // Guardado de token de login en redis
     $token = RedisService::guardarKeyRedis(
@@ -386,32 +385,6 @@ class UsuarioCoordinator
       TextoUtils::agregarLogError($e, "UsuarioCoordinator::editarPermisosPerfil()");
       throw new UnexpectedValueException(
         "Problema en servicio editar permisos de perfil usuario. {$e->getMessage()} ",
-        300,
-        $e
-      );
-    }
-  }
-
-  /**
-   * Coordinator que edita la imagen de un usuario
-   * @param array $datos
-   * @return string
-   */
-  public static function editarImagen($datos)
-  {
-    try {
-      return DB::transaction(function () use ($datos) {
-        $usuarioObj = UsuarioService::obtenerUsuario($datos["usuarioEditadoId"]);
-
-        // Agregar en Base de datos nueva imagen y eliminar anteriores
-        $datos["nombreSistema"] = UsuarioService::editarImagen($datos);
-
-        UsuarioService::subirImagenUsuarioS3($datos, $usuarioObj);
-      }, 5);
-    } catch (Exception $e) {
-      TextoUtils::agregarLogError($e, "UsuarioCoordinator::editarImagen()");
-      throw new UnexpectedValueException(
-        "Problema en servicio editar imagen de usuario. {$e->getMessage()} ",
         300,
         $e
       );
