@@ -66,6 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'no.cache' => \App\Http\Middleware\NoCache::class,
         'redireccionar.autenticado' => \App\Http\Middleware\RedireccionarAutenticado::class,
-        // 'validar.sesion' => \App\Http\Middleware\ValidarSesion::class,
+        'validar.sesion' => \App\Http\Middleware\ValidarSesion::class,
     ];
 }
