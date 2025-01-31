@@ -4,9 +4,20 @@
   --color-blanco: #FFFFFF;
   --color-negro: #000000;
 
-  --color-primario: #cd3b02;
+  --color-primario: #c63903;
   --color-plata: #CBCDCC;
   --color-oxford: #212838;
+
+  --color-primario-50: #fdece6;
+  --color-primario-100: #fad7c8;
+  --color-primario-200: #f5b298;
+  --color-primario-300: #f08b68;
+  --color-primario-400: #e9603b;
+  --color-primario-500: #c63903;
+  --color-primario-600: #a02e02;
+  --color-primario-700: #7a2402;
+  --color-primario-800: #541902;
+  --color-primario-900: #2e0e01;
 
   --color-gris-50: #F8F9FB;
   --color-gris-100: #F0F2F5;
@@ -339,7 +350,7 @@ input[type="email"]::placeholder,
 input[type="password"]::placeholder,
 input[type="tel"]::placeholder,
 textarea::placeholder {
-  color: var(--color-gris-500);
+  color: var(--color-gris-800);
 }
 
 input:disabled,
@@ -465,7 +476,7 @@ input:focus,
 button:focus:not(.boton-en-texto):not(.boton-dropdown),
 textarea:focus,
 select:focus {
-  outline: 1px solid var(--color-amarillo-100);
+  outline: 1px solid var(--color-primario-300);
   outline-offset: 1px;
 }
 
@@ -1555,7 +1566,7 @@ table.tabla-detalle td.icono-caja-dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("../imagenes/artegrafico-background-login.jpg");
+  background-image: url("../imagenes/fondo-login.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -1567,8 +1578,13 @@ table.tabla-detalle td.icono-caja-dashboard {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-negro);
-  border-radius: 10px;
+  background-color: var(--color-primario);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid #d7d7d7;
+
 }
 
 .vista-web .login .login__card .credenciales-card {
@@ -1580,7 +1596,7 @@ table.tabla-detalle td.icono-caja-dashboard {
 }
 
 .vista-web .login .login__card .credenciales-card h1 {
-  font-size: 22px;
+  font-size: 30px;
 }
 
 .vista-web .login .login__card .credenciales-card img {

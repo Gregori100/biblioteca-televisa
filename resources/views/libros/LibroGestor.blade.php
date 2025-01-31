@@ -20,7 +20,7 @@
   <!-- FIN ALERTA -->
 
   <div class="encabezado">
-    <h2>Libros</h2>
+    <h2>Biblioteca</h2>
     <div class="opciones">
       <usuario-activo :usuario-logueado="usuarioLogueado" :csrf-token="csrfToken" />
     </div>
@@ -994,6 +994,11 @@
 
       // Grid
       columns: [{
+          headerText: 'Acciones',
+          textAlign: "center",
+          width: 100,
+          template: '#opcionesTemplate'
+        }, {
           field: 'folio',
           headerText: 'Folio',
           width: 70,
@@ -1042,11 +1047,6 @@
           width: 120,
         },
         {
-          field: 'observaciones',
-          headerText: 'Observaciones',
-          width: 200,
-        },
-        {
           field: 'statusDisponibilidad',
           headerText: 'Status disponibilidad',
           width: 150,
@@ -1060,19 +1060,32 @@
         //   showInColumnChooser: false,
         //   template: '#statusTemplate'
         // },
+        // {
+        //   field: 'registroFecha',
+        //   headerText: 'Fecha registro',
+        //   width: 120,
+        //   type: 'date',
+        //   format: 'yyyy/MM/dd HH:mm'
+        // },
         {
-          field: 'registroFecha',
-          headerText: 'Fecha registro',
+          field: 'salidaFecha',
+          headerText: 'Fecha ocupación',
           width: 120,
           type: 'date',
-          format: 'yyyy/MM/dd HH:mm'
+          format: 'yyyy/MM/dd'
         },
         {
-          headerText: 'Acciones',
-          textAlign: "center",
-          width: 100,
-          template: '#opcionesTemplate'
-        }
+          field: 'regresoFecha',
+          headerText: 'Fecha retorno',
+          width: 120,
+          type: 'date',
+          format: 'yyyy/MM/dd'
+        },
+        {
+          field: 'observaciones',
+          headerText: 'Observaciones',
+          width: 200,
+        },
       ],
 
       // Filtros
@@ -1171,6 +1184,8 @@
         // Setear registros
         // this.libros = this.datosGestor.registros;
         this.libros = this.datosGestor;
+        console.log(this.libros);
+
 
         this.libros.forEach((libro) => {
           libro.habilitarOcupar = libro.statusDisponibilidad != "DISPONIBLE";

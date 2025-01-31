@@ -16,14 +16,13 @@
   <div class="login">
     <div class="login__card">
       <div class="credenciales-card">
-        <img src="{{ asset('imagenes/artegrafico-logotipo-oro.svg') }}" alt="" class="mb-32">
+        <!-- <img src="{{ asset('imagenes/artegrafico-logotipo-oro.svg') }}" alt="" class="mb-32"> -->
 
-        <h1 class="mb-24 texto-color-blanco">Panel Administrativo</h1>
+        <h1 class="mb-40 texto-color-blanco letra-bold">Login</h1>
 
         <form action="{{ route('auth.login') }}" method="POST" class="gap-16 mb-32" id="form-login">
           @csrf
           <div class="input-row">
-            <label for="usuario" class="requerido texto-color-blanco">Usuario:</label>
             <input
               type="text"
               id="usuario"
@@ -35,7 +34,6 @@
               id="inputUsuario">
           </div>
           <div class="input-row">
-            <label for="password" class="requerido texto-color-blanco">Contraseña:</label>
             <input
               type="password"
               id="password"
