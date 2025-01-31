@@ -16,10 +16,10 @@ Vue.component("usuario-activo", {
       urlLogout: "/logout",
     };
   },
-  mounted(){
+  mounted() {
     window.addEventListener('click', this.handleClickOutside);
   },
-  beforeDestroy(){
+  beforeDestroy() {
     window.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
@@ -61,19 +61,11 @@ Vue.component("usuario-activo", {
     },
   },
   computed: {
-    imagenUsuario() {
-      return this.usuarioLogueado.rutaImgUsuarioLogeado != null ?
-        `${window.location.origin}/${this.usuarioLogueado.rutaImgUsuarioLogeado}` :
-        `${window.location.origin}/imagenes/artegrafico-icono-perfil.svg`
-    }
   },
   template: `
     <transition name="usuario-activo">
       <div class="row-usuario-activo puntero-cursor" ref="rowUsuario">
-        <div class="avatar" id="avatar" style="margin-right: 10px;" @click="toggleDropdownUsuario()">
-          <img :src="imagenUsuario" alt="">
-        </div>
-        <p class="letra-semi-bold" @click="toggleDropdownUsuario()">{{ usuarioLogueado.usuario }}</p>
+        <h4 class="letra-semi-bold" @click="toggleDropdownUsuario()">{{ usuarioLogueado.usuario }}</h4>
         <button id="dropdownBtn" class="boton-dropdown" ref="dropdownBtn" id="btnOpcionesUsuario" @click="toggleDropdownUsuario()">
           <i :class="showDropdownUsuario ? 'icon-angulo-arriba' : 'icon-angulo-abajo'"></i>
         </button >
