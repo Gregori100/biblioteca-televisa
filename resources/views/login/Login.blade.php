@@ -40,7 +40,7 @@
               type="password"
               id="password"
               name="password"
-              placeholder="password"
+              placeholder="Password"
               required
               maxlength="128"
               value="{{ old('password') }}"
