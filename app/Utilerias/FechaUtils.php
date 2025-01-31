@@ -16,7 +16,7 @@ class FechaUtils
   {
     $zonaHoraria = $zonaHoraria ?? env('APP_TIMEZONE', 'America/Mexico_City');
 
-    if($fechaConHora){
+    if ($fechaConHora) {
       return Carbon::now($zonaHoraria)->format('Y-m-d');
     } else {
       return Carbon::now($zonaHoraria)->toDateTimeString();
@@ -332,5 +332,26 @@ class FechaUtils
   {
     $zonaHoraria = $zonaHoraria ?? env('APP_TIMEZONE', 'America/Mexico_City');
     return Carbon::now($zonaHoraria)->endOfMonth()->format('Y-m-d');
+  }
+
+  /**
+   * Utileria para manejar fechas
+   * @param string $zonaHoraria Zona horaria del cliente
+   * @return string $fechaActual
+   */
+  public static function sumarDiasFechaActual(string $zonaHoraria = null, $diasAgregar = 5)
+  {
+    $zonaHoraria = $zonaHoraria ?? env('APP_TIMEZONE', 'America/Mexico_City');
+    return Carbon::now($zonaHoraria)->addDays($diasAgregar)->toDateTimeString();
+  }
+
+  /**
+   * Utileria para obtener la fecha actual del servidor con milisegundos
+   * @return string $fechaActual
+   */
+  public static function fechaActualMilisegundos()
+  {
+    $timeZone = env('APP_TIMEZONE', 'America/Mexico_City');
+    return Carbon::now($timeZone)->format('Y-m-d H:i:s.u');
   }
 }
