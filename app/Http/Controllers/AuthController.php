@@ -42,7 +42,7 @@ class AuthController extends BaseController
 
       $token = UsuarioCoordinator::autenticarUsuario($datos);
 
-      return redirect()->route('homeAdministrativo')->cookie('session_user_token', $token, 60 * 4);
+      return redirect()->route('libros.gestor')->cookie('session_user_token', $token, 60 * 4);
     } catch (ValidacionException $e) {
       return redirect()->route('loginAdministrativo')->withInput()
         ->with('error', "Usuario o password requerido");
