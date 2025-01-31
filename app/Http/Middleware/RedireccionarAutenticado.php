@@ -11,11 +11,11 @@ class RedireccionarAutenticado
   {
     $ruta = $request->route()->getName();
 
-    // // Verificar si la cookie 'session_user_token' existe
-    // if ($ruta == 'loginAdministrativo' && $request->hasCookie('session_user_token')) {
-    //   // Redirigir a la ruta de 'home'
-    //   return redirect()->route('homeAdministrativo');
-    // }
+    // Verificar si la cookie 'session_user_token' existe
+    if ($ruta == 'loginAdministrativo' && $request->hasCookie('session_user_token')) {
+      // Redirigir a la ruta de 'home'
+      return redirect()->route('libros.gestor');
+    }
 
     // Continuar con la solicitud si la cookie no existe
     return $next($request);
