@@ -77,7 +77,7 @@ class LibroBO
 
     if($ocuparLibro){
       $update["salida_fecha"]         = FechaUtils::fechaActual();
-      $update["regreso_fecha"]        = FechaUtils::sumarDiasFechaActual();
+      $update["regreso_fecha"]        = FechaUtils::sumarDiasFechaActual(null, 14);
     } else {
       $update["salida_fecha"]         = null;
       $update["regreso_fecha"]        = null;

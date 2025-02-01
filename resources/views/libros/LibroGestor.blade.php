@@ -154,52 +154,112 @@
     <!-- FIN FILTROS -->
 
     <div class="contenedor-grid-gestor">
-      <div id="Grid"></div>
-
-
-      <!-- <div class="tabla-gestor">
-        <div class="cabecera-tabla">
-          <div class="row-tabla">
-            <div class="celda-tabla w5p">Folio</div>
-            <div class="celda-tabla w50p">Nombre</div>
-            <div class="celda-tabla w5p">Autor</div>
-            <div class="celda-tabla w5p">Editorial</div>
-            <div class="celda-tabla w5p">Número de páginas</div>
-            <div class="celda-tabla w5p">Genero</div>
-            <div class="celda-tabla w5p">Idioma</div>
-            <div class="celda-tabla w5p">ISBN</div>
-            <div class="celda-tabla w5p">Observaciones</div>
-            <div class="celda-tabla w5p">Status disponibilidad</div>
-            <div class="celda-tabla w5p">Status</div>
-            <div class="celda-tabla w5p">Fecha registro</div>
-          </div>
-        </div>
-        <div class="body-tabla">
+      <!-- <div id="Grid"></div> -->
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th class="w5p texto-centrado">Acciones</th>
+            <th class="w5p texto-centrado">Folio</th>
+            <th class="w10p">Nombre</th>
+            <th class="w10p">Autor</th>
+            <th class="w10p">Editorial</th>
+            <th class="w6p texto-centrado">No. páginas</th>
+            <th class="w8p">Género</th>
+            <th class="w8p">Idioma</th>
+            <th class="w9p">ISBN</th>
+            <th class="w7p">Disponibilidad</th>
+            <th class="w6p texto-centrado">Ocupación</th>
+            <th class="w6p texto-centrado">Retorno</th>
+            <th class="w10p">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
           <template v-if="libros.length > 0">
-            <div class="row-tabla" v-for="libro in libros">
-              <div class="celda-tabla w5p">
+            <tr v-for="libro in libros">
+              <td>
+                <div class="celda-acciones-gestor center" v-if="libro.status == 200">
+                  <button
+                    v-if="permisosVista.editar"
+                    @@click="abrirModalEditarLibro(libro)"
+                    class="boton-en-texto"
+                    :id="'id-editar-' + libro.libroId"
+                    title="Editar"
+                    :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
+                    <i class="icon-editar accionEditar"></i>
+                  </button>
+                  <button
+                    class="boton-en-texto"
+                    @@click="abrirModalOcuparLibro(libro)"
+                    :id="'id-ocupar-' + libro.libroId"
+                    title="Ocupar"
+                    :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
+                    <i class="icon-calendario accionOcupar"></i>
+                  </button>
+                  <button
+                    v-if="permisosVista.eliminar"
+                    @@click="abrirModalEliminarLibro(libro)"
+                    class="boton-en-texto"
+                    :id="'id-eliminar-' + libro.libroId"
+                    title="Eliminar"
+                    :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
+                    <i class="icon-eliminar accionEliminar"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="texto-centrado">
                 <a :href="'/libros/' + libro.libro_id + '/' + libro.hash_id">
                   @{{ libro.folio }}
                 </a>
-              </div>
-              <div class="celda-tabla w50p">@{{ libro.nombre }}</div>
-              <div class="celda-tabla w5p">@{{ libro.autorNombre }}</div>
-              <div class="celda-tabla w5p">@{{ libro.editorialNombre }}</div>
-              <div class="celda-tabla w5p">@{{ libro.numeroPaginas }}</div>
-              <div class="celda-tabla w5p">@{{ capitalizarTexto(libro.genero) }}</div>
-              <div class="celda-tabla w5p">@{{ capitalizarTexto(libro.idioma) }}</div>
-              <div class="celda-tabla w5p">@{{ libro.isbn }}</div>
-              <div class="celda-tabla w5p">@{{ libro.observaciones }}</div>
-              <div class="celda-tabla w5p">@{{ libro.statusDisponibilidad }}</div>
-              <div class="celda-tabla w5p">@{{ libro.status }}</div>
-              <div class="celda-tabla w5p">@{{ moment(libro.registroFecha).format("YYYY/MM/DD HH:mm") }}</div>
-            </div>
+              </td>
+              <td>
+                <div class="texto-elipsis">
+                  @{{ libro.nombre }}
+                </div>
+              </td>
+              <td>
+                <div class="texto-elipsis">
+                  @{{ libro.autorNombre }}
+                </div>
+              </td>
+              <td>
+                <div class="texto-elipsis">
+                  @{{ libro.editorialNombre }}
+                </div>
+              </td>
+              <td class="texto-centrado">@{{ libro.numeroPaginas }}</td>
+              <td>@{{ capitalizarTexto(libro.genero) }}</td>
+              <td>@{{ capitalizarTexto(libro.idioma) }}</td>
+              <td>@{{ libro.isbn }}</td>
+              <td>
+                <div class="status-global">
+                  <div :class="'status-bullet '+ obtenerClaseStatus(libro.statusDisponibilidad)"></div>
+                  @{{ capitalizarTexto(libro.statusDisponibilidad) }}
+                </div>
+              </td>
+              <td class="texto-centrado">
+                @{{ libro.salidaFecha ? moment(libro.salidaFecha).format("DD/MM/YYYY") : '' }}
+              </td>
+              <td class="texto-centrado">
+                @{{ libro.regresoFecha ? moment(libro.regresoFecha).format("DD/MM/YYYY") : '' }}
+              </td>
+              <td>
+                <div class="texto-elipsis">
+                  @{{ libro.observaciones }}
+                </div>
+              </td>
+            </tr>
           </template>
           <template v-else>
-            <div class="celda-tabla">No se encuentra ninguna libro relacionado</div>
+            <tr>
+              <td colspan="13">
+                <div class="texto-centrado">
+                  No se encuentra ninguna libro relacionado
+                </div>
+              </td>
+            </tr>
           </template>
-        </div>
-      </div> -->
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -1077,14 +1137,14 @@
           headerText: 'Fecha ocupación',
           width: 120,
           type: 'date',
-          format: 'yyyy/MM/dd'
+          format: 'dd/MM/yyyy'
         },
         {
           field: 'regresoFecha',
           headerText: 'Fecha retorno',
           width: 120,
           type: 'date',
-          format: 'yyyy/MM/dd'
+          format: 'dd/MM/yyyy'
         },
         {
           field: 'observaciones',
@@ -1149,7 +1209,7 @@
     computed: {
       calcularFechaEntrega() {
         const hoy = new Date();
-        hoy.setDate(hoy.getDate() + 5);
+        hoy.setDate(hoy.getDate() + 14);
 
         return moment(hoy).format("DD/MM/YYYY")
       },
