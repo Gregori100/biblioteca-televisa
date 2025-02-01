@@ -132,7 +132,12 @@
 
         <div class="input-row">
           <label>Status</label>
-          <input name="statusDisponibilidad[]" id="selectStatusDisponibilidad" />
+          <select name="statusDisponibilidad[]" id="selectStatusDisponibilidad" v-model="filtros.statusDisponibilidad">
+            <option :value="undefined" disabled>Selecciona una opción</option>
+            <option value="DISPONIBLE">Disponible</option>
+            <option value="OCUPADO">Ocupado</option>
+            <option value="RETIRADO">Retirado</option>
+          </select>
         </div>
 
         <div class="input-row botones-filtros">
@@ -971,44 +976,6 @@
   <!-- TERMINA MODAL OCUPAR LIBRO -->
 </div>
 
-<!-- TEMPLATE -->
-<script id="folioTemplate" type="text/x-template">
-  <a href="libros/${libroId}/${hashId}">${folio}</a>
-</script>
-
-<script id="statusTemplate" type="text/x-template">
-  <div class="status-global">
-    <div class="status-bullet ${obtenerClaseStatus(status)}"></div>
-    ${statusNombre}
-  </div>
-</script>
-<script id="statusDisponibilidadTemplate" type="text/x-template">
-  <div class="status-global">
-    <div class="status-bullet ${obtenerClaseStatus(statusDisponibilidad)}"></div>
-    ${capitalizarTexto(statusDisponibilidad)}
-  </div>
-</script>
-
-<script id="opcionesTemplate" type="text/x-template">
-  <div class="celda-acciones-gestor center">
-    ${if(status == 200)}
-      ${if(visualizarEditar)}
-      <button class="boton-en-texto" id="id-editar-${libro_id}" title="Editar" ${if(habilitarEditar)}disabled${/if}>
-        <i class="icon-editar accionEditar"></i>
-      </button>
-      ${/if}
-      <button class="boton-en-texto" id="id-ocupar-${libro_id}" title="Retiar" ${if(habilitarOcupar)}disabled${/if}>
-        <i class="icon-calendario accionOcupar"></i>
-      </button>
-      ${if(visualizarEliminar)}
-      <button class="boton-en-texto" id="id-eliminar-${libro_id}" title="Eliminar" ${if(habilitarEliminar)}disabled${/if}>
-        <i class="icon-eliminar accionEliminar"></i>
-      </button>
-      ${/if}
-    ${/if}
-  </div>
-</script>
-
 <!-- VARIABLES -->
 <script id="usuarioLogueado" type="application/json">
   @json($usuarioLogueado)
@@ -1057,105 +1024,10 @@
       datosGestor: JSON.parse(document.getElementById('datosGestor').textContent),
       filtrosURL: JSON.parse(document.getElementById('filtros').textContent),
 
-      // Grid
-      columns: [{
-          headerText: 'Acciones',
-          textAlign: "center",
-          width: 100,
-          template: '#opcionesTemplate'
-        }, {
-          field: 'folio',
-          headerText: 'Folio',
-          width: 70,
-          template: '#folioTemplate'
-        },
-        {
-          field: 'nombre',
-          headerText: 'Nombre',
-          width: 250,
-        },
-        {
-          field: 'autorNombre',
-          headerText: 'Autor',
-          width: 180,
-        },
-        {
-          field: 'editorialNombre',
-          headerText: 'Editorial',
-          width: 180,
-        },
-        {
-          field: 'numeroPaginas',
-          headerText: 'N. páginas',
-          width: 120,
-          textAlign: "center",
-          type: 'number',
-          sortComparer: (a, b) => {
-            return Number(a) < Number(b) ? -1 : 1
-          }
-        },
-        {
-          field: 'genero',
-          headerText: 'Genero',
-          width: 120,
-          template: '${capitalizarTexto(genero)}'
-        },
-        {
-          field: 'idioma',
-          headerText: 'Idioma',
-          width: 120,
-          template: '${capitalizarTexto(idioma)}'
-        },
-        {
-          field: 'isbn',
-          headerText: 'ISBN',
-          width: 120,
-        },
-        {
-          field: 'statusDisponibilidad',
-          headerText: 'Status disponibilidad',
-          width: 150,
-          showInColumnChooser: false,
-          template: '#statusDisponibilidadTemplate'
-        },
-        // {
-        //   field: 'status',
-        //   headerText: 'Status',
-        //   width: 100,
-        //   showInColumnChooser: false,
-        //   template: '#statusTemplate'
-        // },
-        // {
-        //   field: 'registroFecha',
-        //   headerText: 'Fecha registro',
-        //   width: 120,
-        //   type: 'date',
-        //   format: 'yyyy/MM/dd HH:mm'
-        // },
-        {
-          field: 'salidaFecha',
-          headerText: 'Fecha ocupación',
-          width: 120,
-          type: 'date',
-          format: 'dd/MM/yyyy'
-        },
-        {
-          field: 'regresoFecha',
-          headerText: 'Fecha retorno',
-          width: 120,
-          type: 'date',
-          format: 'dd/MM/yyyy'
-        },
-        {
-          field: 'observaciones',
-          headerText: 'Observaciones',
-          width: 200,
-        },
-      ],
-
       // Filtros
       filtros: {
         status: null,
+        statusDisponibilidad: undefined,
       },
       statusDisponibilidadOpc: [{
           value: "DISPONIBLE",
@@ -1251,50 +1123,6 @@
         this.libros = this.datosGestor;
         console.log(this.libros);
 
-
-        this.libros.forEach((libro) => {
-          libro.habilitarOcupar = libro.statusDisponibilidad != "DISPONIBLE";
-          libro.habilitarEditar = libro.statusDisponibilidad != "DISPONIBLE";
-          libro.visualizarEditar = this.permisosVista.editar;
-          libro.habilitarEliminar = libro.statusDisponibilidad != "DISPONIBLE";
-          libro.visualizarEliminar = this.permisosVista.eliminar;
-        });
-
-        var grid = new ej.grids.Grid({
-          height: '100%',
-          gridLines: 'Horizontal',
-          dataSource: this.libros,
-          columns: this.columns,
-          allowPaging: true,
-          allowSorting: true,
-          allowResizing: true,
-          allowReordering: true,
-          allowColumnChooser: false,
-          showColumnChooser: false,
-          pageSettings: {
-            pageSize: 100
-          },
-          // toolbar: ['ColumnChooser'],
-          recordClick: (args) => {
-            if (args.target.classList.contains('accionEditar')) {
-              var rowObj = grid.getRowObjectFromUID(ej.base.closest(args.target, '.e-row').getAttribute(
-                'data-uid'));
-              this.abrirModalEditarLibro(rowObj.data);
-            }
-            if (args.target.classList.contains('accionEliminar')) {
-              var rowObj = grid.getRowObjectFromUID(ej.base.closest(args.target, '.e-row').getAttribute(
-                'data-uid'));
-              this.abrirModalEliminarLibro(rowObj.data);
-            }
-            if (args.target.classList.contains('accionOcupar')) {
-              var rowObj = grid.getRowObjectFromUID(ej.base.closest(args.target, '.e-row').getAttribute(
-                'data-uid'));
-              this.abrirModalOcuparLibro(rowObj.data);
-            }
-          }
-        });
-        grid.appendTo('#Grid');
-
         this.$refs.inputFiltros.focus();
       },
       // Alerta
@@ -1312,27 +1140,18 @@
       /************************* Filtros **************************/
       /************************************************************/
       cargarFiltros() {
-        this.filtros.statusDisponibilidad = this.filtrosURL.statusDisponibilidad;
+        if (this.filtrosURL.statusDisponibilidad.length > 0) {
+          this.filtros.statusDisponibilidad = this.filtrosURL.statusDisponibilidad[0];
+        } else {
+          this.filtros.statusDisponibilidad = undefined
+        }
       },
       async toggleFiltros() {
         this.cardFiltros = !this.cardFiltros;
 
         this.$nextTick(() => {
-          if (this.cardFiltros) {
-            this.renderSelectStatusDisponibilidad();
-          }
+          if (this.cardFiltros) {}
         });
-      },
-      renderSelectStatusDisponibilidad() {
-        this.selectStatusDisponibilidad = cargarMultiSelectCheckBoxSyncfusion(
-          'selectStatusDisponibilidad',
-          () => {
-            this.filtros.status = this.selectStatusDisponibilidad.value
-          },
-          this.statusDisponibilidadOpc, {
-            value: "value",
-            text: "text",
-          }, this.filtros.statusDisponibilidad);
       },
 
       /************************************************************/
