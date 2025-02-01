@@ -9,11 +9,6 @@
   {{-- AXIOS --}}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-  {{-- SYNC FUSION --}}
-  <link rel="stylesheet" href="{{ asset('ej2-dataGrid/styles/material.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('ej2-dataGrid/styles/customized/material.min.css') }}">
-  <script src="{{ asset('ej2-dataGrid/scripts/ej2.min.js') }}" type="text/javascript"></script>
-
   {{-- VUE --}}
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 
