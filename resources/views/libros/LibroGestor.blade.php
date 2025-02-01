@@ -64,7 +64,8 @@
             type="button"
             class="boton-agregar-filtro"
             @@click="abrirModalAgregarLibro()"
-            id="btnNuevoLibro">
+            id="btnNuevoLibro"
+            :disabled="!permisosVista.agregar">
             <i class="icon-agregar"></i>
             Nuevo libro
           </button>
@@ -931,15 +932,19 @@
 <script id="opcionesTemplate" type="text/x-template">
   <div class="celda-acciones-gestor center">
     ${if(status == 200)}
-    <button class="boton-en-texto" id="id-editar-${libro_id}" title="Editar" ${if(habilitarEditar)}disabled${/if}>
-      <i class="icon-editar accionEditar"></i>
-    </button>
-    <button class="boton-en-texto" id="id-ocupar-${libro_id}" title="Retiar" ${if(habilitarOcupar)}disabled${/if}>
-      <i class="icon-calendario accionOcupar"></i>
-    </button>
-    <button class="boton-en-texto" id="id-eliminar-${libro_id}" title="Eliminar" ${if(habilitarEliminar)}disabled${/if}>
-      <i class="icon-eliminar accionEliminar"></i>
-    </button>
+      ${if(visualizarEditar)}
+      <button class="boton-en-texto" id="id-editar-${libro_id}" title="Editar" ${if(habilitarEditar)}disabled${/if}>
+        <i class="icon-editar accionEditar"></i>
+      </button>
+      ${/if}
+      <button class="boton-en-texto" id="id-ocupar-${libro_id}" title="Retiar" ${if(habilitarOcupar)}disabled${/if}>
+        <i class="icon-calendario accionOcupar"></i>
+      </button>
+      ${if(visualizarEliminar)}
+      <button class="boton-en-texto" id="id-eliminar-${libro_id}" title="Eliminar" ${if(habilitarEliminar)}disabled${/if}>
+        <i class="icon-eliminar accionEliminar"></i>
+      </button>
+      ${/if}
     ${/if}
   </div>
 </script>
@@ -1190,7 +1195,9 @@
         this.libros.forEach((libro) => {
           libro.habilitarOcupar = libro.statusDisponibilidad != "DISPONIBLE";
           libro.habilitarEditar = libro.statusDisponibilidad != "DISPONIBLE";
+          libro.visualizarEditar = this.permisosVista.editar;
           libro.habilitarEliminar = libro.statusDisponibilidad != "DISPONIBLE";
+          libro.visualizarEliminar = this.permisosVista.eliminar;
         });
 
         var grid = new ej.grids.Grid({

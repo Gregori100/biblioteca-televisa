@@ -327,21 +327,15 @@ cargarDatePickerSyncfusion = (
 const obtenerClaseStatus = (status) => {
   switch (status) {
     case 100:
-    case 'PENDIENTE':
       return "status-pendiente";
     case 200:
-    case "COMPLETADO":
-    case "FIRMADO":
-    case 'PAGADO':
+    case "DISPONIBLE":
       return "status-activo";
     case 300:
+    case "RETIRADO":
       return "status-eliminado";
-    case "POR_CONFIGURAR":
-    case "ABIERTO":
-    case "PARCIALMENTE_PAGADO":
+    case "OCUPADO":
       return "status-progreso";
-    case "PUBLICADO":
-      return "status-publicado";
     default:
       return "status-pendiente";
   }
