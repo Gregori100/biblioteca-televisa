@@ -16,8 +16,6 @@
   <div class="login">
     <div class="login__card">
       <div class="credenciales-card">
-        <!-- <img src="{{ asset('imagenes/artegrafico-logotipo-oro.svg') }}" alt="" class="mb-32"> -->
-
         <h1 class="mb-40 texto-color-blanco letra-bold">Login</h1>
 
         <form action="{{ route('auth.login') }}" method="POST" class="gap-16 mb-32" id="form-login">

@@ -847,7 +847,7 @@
           <i @@click="cerrarModalEliminarLibro" class="icon-cerrar" id="btnCerrarModalEliminarLibro"></i>
         </div>
         <div class="modal-body">
-          <img class="ilustracion-modal ilustracion-eliminar" src="{{ asset('imagenes/artegrafico-ilustracion-eliminar.svg') }}" alt="">
+          <img class="ilustracion-modal ilustracion-eliminar" src="{{ asset('imagenes/biblioteca-ilustracion-eliminar.svg') }}" alt="">
 
           <p class="titulo-modal">Eliminar registro</p>
           <p>¿Estás seguro que deseas eliminar el siguiente libro?</p>

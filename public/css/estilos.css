@@ -1681,10 +1681,6 @@ table.tabla-detalle td.icono-caja-dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("../imagenes/artegrafico-isotipo-oro.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
   transition: all 0.5s ease;
 }
 
@@ -1897,89 +1893,6 @@ table.tabla-detalle td.icono-caja-dashboard {
   text-align: center;
 }
 
-
-/***************************** Banner ****************************/
-.banner {
-  width: 100%;
-  height: 144px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 64px;
-}
-
-.banner.banner--registro-numero {
-  background-image: url("../imagenes/artegrafico-background-login-movil.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top center;
-  height: 300px;
-  margin-bottom: 120px;
-}
-
-.banner .banner__logo {
-  width: 128px;
-  height: 128px;
-  background-color: var(--color-blanco);
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: -100px;
-}
-
-.banner .banner__logo img {
-  width: 86px;
-  height: 80px;
-}
-
-.banner.banner--registro-contrato {
-  background-image: url("../imagenes/artegrafico-background-completarregistro-mobile.jpg");
-  background-size: contain;
-  background-repeat: repeat;
-  background-position: top center;
-}
-
-.banner .banner__icon {
-  width: 80px;
-  height: 80px;
-  background-color: var(--color-primario);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: -40px;
-  border: 3px solid var(--color-blanco);
-}
-
-.banner .banner__icon img {
-  width: 40px;
-  height: 40px;
-}
-
-.banner.banner--login-cliente {
-  height: 220px;
-  margin-bottom: 40px;
-}
-
-.banner.banner--login-cliente .banner__logo {
-  width: auto;
-  height: auto;
-  background: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-}
-
-.banner.banner--login-cliente .banner__logo img {
-  width: 76px;
-  height: 80px;
-}
 
 /********************************************************************/
 /****************** ESTILOS SYNCFUSION Multiselect ******************/
@@ -3519,85 +3432,6 @@ main.main-vista-movil {
   padding-inline: 28px;
   padding-block: 10px;
   cursor: pointer;
-}
-
-/*****************************************************************/
-/********************** Home administrativo **********************/
-/*****************************************************************/
-.vista-web .contenedor-contenido .contenedor-home {
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-gris-100);
-}
-
-.vista-web .contenedor-contenido .contenedor-home .bar-home {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-inline: 24px;
-  padding-top: 16px;
-  padding-bottom: 24px;
-  gap: 24px;
-}
-
-.contenedor-home .bar-home .row-home {
-  width: 100%;
-  height: auto;
-}
-
-.contenedor-home .bar-home .row-home.banner-bienvenida {
-  width: 100%;
-  max-width: 1204px;
-  min-height: 240px;
-  background-image: url("../imagenes/artegrafico-banner-home.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  border-radius: 10px;
-  padding-inline: 32px;
-  padding-top: 24px;
-  padding-bottom: 40px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 4px;
-}
-
-.contenedor-home .bar-home .row-home.banner-bienvenida .titulo {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--color-blanco);
-}
-
-.contenedor-home .bar-home .row-home.banner-bienvenida .subtitulo {
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-blanco);
-}
-
-.contenedor-home .bar-home .row-home.banner-bienvenida img {
-  width: 114px;
-}
-
-.contenedor-home .bar-home .row-home.row-contenedor-botones {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  align-items: center;
-  overflow: auto;
-}
-
-.contenedor-home .bar-home .row-home .contenedor-cards-accesos-directos {
-  width: 100%;
-  height: 225px;
-  display: flex;
-  column-gap: 32px;
-  justify-content: center;
 }
 
 /*****************************************************************/

@@ -1,6 +1,0 @@
-<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="1.5" y="1.5" width="77" height="77" rx="38.5" fill="#EFB810" style="fill:#EFB810;fill:color(display-p3 0.9373 0.7216 0.0627);fill-opacity:1;"/>
-<rect x="1.5" y="1.5" width="77" height="77" rx="38.5" stroke="white" style="stroke:white;stroke-opacity:1;" stroke-width="3"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M50 30C50 35.5228 45.5228 40 40 40C34.4772 40 30 35.5228 30 30C30 24.4772 34.4772 20 40 20C45.5228 20 50 24.4772 50 30ZM46.25 30C46.25 33.4518 43.4518 36.25 40 36.25C36.5482 36.25 33.75 33.4518 33.75 30C33.75 26.5482 36.5482 23.75 40 23.75C43.4518 23.75 46.25 26.5482 46.25 30Z" fill="#212838" style="fill:#212838;fill:color(display-p3 0.1276 0.1584 0.2200);fill-opacity:1;"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M22.5 55C22.5 49.4772 26.9772 45 32.5 45H47.5C53.0228 45 57.5 49.4772 57.5 55V57.5C57.5 58.8807 56.3807 60 55 60H25C23.6193 60 22.5 58.8807 22.5 57.5V55ZM26.25 55C26.25 51.5482 29.0482 48.75 32.5 48.75H47.5C50.9518 48.75 53.75 51.5482 53.75 55V56.25H26.25V55Z" fill="#212838" style="fill:#212838;fill:color(display-p3 0.1276 0.1584 0.2200);fill-opacity:1;"/>
-</svg>

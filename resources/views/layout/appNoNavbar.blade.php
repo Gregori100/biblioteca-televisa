@@ -44,7 +44,6 @@
   <link rel="stylesheet" href="{{ asset('ico/outline.css') }}" />
 
   {{-- ICON --}}
-  <link rel="icon" href="{{ env('APP_URL') }}/imagenes/artegrafico-favicon.svg" type="image/png">
 </head>
 
 <body>

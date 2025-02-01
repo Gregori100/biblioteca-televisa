@@ -32,7 +32,7 @@ Vue.component("alerta", {
   },
   computed: {
     alertaImage() {
-      return `${this.appURL}/imagenes/dataxtractor-iconos-notificacion-${this.alertaClass}.svg`;
+      return `${this.appURL}/imagenes/biblioteca-iconos-notificacion-${this.alertaClass}.svg`;
     }
   },
   methods: {
