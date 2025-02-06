@@ -9,6 +9,6 @@ class PermisoConst
     'libros.agregar' => 'biblioteca.libros.agregar',
     'libros.editar' => 'biblioteca.libros.editar',
     'libros.eliminar' => 'biblioteca.libros.eliminar',
-    'libros.ocupar' => 'biblioteca.libros.ocupar',
+    // 'libros.ocupar' => 'biblioteca.libros.ocupar',
   ];
 }
