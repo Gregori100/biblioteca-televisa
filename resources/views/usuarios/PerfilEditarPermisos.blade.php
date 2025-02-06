@@ -123,11 +123,11 @@
       <div class="contenedor-datos-detalle">
         <div class="detalle-datos">
           <div class="row-titulo-detalle mb-0 solo-boton-opcion">
-            <!-- :disabled="!permisosVista.editarPermisos"   -->
             <button
               class="boton-aceptar"
               @@click="editarPermisos()"
-              id="btnEditarPermisos">
+              id="btnEditarPermisos"
+              :disabled="!permisosVista.editarPermisos">
               Guardar
             </button>
           </div>

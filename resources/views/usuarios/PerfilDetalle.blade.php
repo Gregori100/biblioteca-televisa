@@ -44,20 +44,20 @@
             <div v-if="showDropdown" class="dropdown-menu" :style="dropdownStyle" id="dropdownOpciones" ref="dropdownOpciones">
               <ul>
                 <li>
-                  <!-- :disabled="!permisosVista.editar" -->
                   <button
                     class="boton-en-texto"
                     @@click="abrirModalEditarPerfil()"
-                    id="opcEditar">
+                    id="opcEditar"
+                    :disabled="!permisosVista.editar">
                     <i class="icon-editar"></i>Editar
                   </button>
                 </li>
                 <li>
-                  <!-- :disabled="!permisosVista.eliminar" -->
                   <button
                     class="boton-en-texto"
                     @@click="abrirModalEliminarPerfil()"
-                    id="opcEliminar">
+                    id="opcEliminar"
+                    :disabled="!permisosVista.eliminar">
                     <i class="icon-eliminar"></i>Eliminar
                   </button>
                 </li>
@@ -106,12 +106,11 @@
         <div class="detalle-datos">
           <div class="row-titulo-detalle mb-34">
             <h3>Lista de permisos</h3>
-            <!-- :disabled="!permisosVista.editarPermisos || perfilObj.status == 300" -->
             <button
               id="btnEditarPermisos"
               class="boton-en-texto mr-8"
               @@click="irEditarPermisos()"
-              :disabled="perfilObj.status == 300">
+              :disabled="!permisosVista.editarPermisos || perfilObj.status == 300">
               <i class="icon-editar"></i>
             </button>
           </div>

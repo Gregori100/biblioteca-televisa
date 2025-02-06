@@ -58,12 +58,12 @@
           </button>
         </div>
         <div class="row-filtros-busqueda__opciones">
-          <!-- :disabled="!permisosVista.agregar" -->
           <button
             type="button"
             class="boton-agregar-filtro"
             @@click="abrirModalAgregarPerfil()"
-            id="btnAgregarPerfil">
+            id="btnAgregarPerfil"
+            :disabled="!permisosVista.agregar">
             <i class="icon-agregar"></i>
             Nuevo perfil
           </button>
@@ -114,8 +114,8 @@
               <td>@{{ perfil.registro_autor }}</td>
               <td>
                 <div class="celda-acciones-gestor center" v-if="perfil.status == 200">
-                  <!-- v-if="permisosVista.eliminar" -->
                   <button
+                    v-if="permisosVista.eliminar"
                     @@click="abrirModalEliminarPerfil(perfil)"
                     class="boton-en-texto"
                     :id="'id-eliminar-' + perfil.perfil_id"

@@ -19,8 +19,8 @@ class PermisoConst
 
     // Perfiles
     'usuarios.agregarPerfil' => 'biblioteca.perfiles.agregar',
-    'usuarios.eliminarPerfil' => 'biblioteca.perfiles.editar',
-    'usuarios.editarPerfil' => 'biblioteca.perfiles.eliminar',
+    'usuarios.editarPerfil' => 'biblioteca.perfiles.editar',
+    'usuarios.eliminarPerfil' => 'biblioteca.perfiles.eliminar',
     'usuarios.editarPermisosPerfil' => 'biblioteca.perfiles.editarPermisos',
   ];
 }
