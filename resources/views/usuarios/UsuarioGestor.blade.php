@@ -62,11 +62,11 @@
             type="button"
             class="boton-agregar-filtro"
             @@click="abrirModalAgregarUsuario()"
-            id="btnNuevoRegistro">
+            id="btnNuevoRegistro"
+            :disabled="!permisosVista.agregar">
             <i class="icon-agregar"></i>
             Nuevo usuario
           </button>
-          <!-- :disabled="!permisosVista.agregar" -->
         </div>
       </div>
 
@@ -110,8 +110,8 @@
               <td>@{{ usuario.registro_autor }}</td>
               <td>
                 <div class="celda-acciones-gestor center" v-if="usuario.status == 200">
-                  <!-- v-if="permisosVista.editar" -->
                   <button
+                    v-if="permisosVista.editar"
                     @@click="abrirModalEditarUsuario(usuario)"
                     class="boton-en-texto"
                     :id="'id-editar-' + usuario.usuario_id"
@@ -119,8 +119,8 @@
                     :disabled="usuario.status != 200">
                     <i class="icon-editar"></i>
                   </button>
-                  <!-- v-if="permisosVista.eliminar" -->
                   <button
+                    v-if="permisosVista.eliminar"
                     @@click="abrirModalEliminarUsuario(usuario)"
                     class="boton-en-texto"
                     :id="'id-eliminar-' + usuario.usuario_id"

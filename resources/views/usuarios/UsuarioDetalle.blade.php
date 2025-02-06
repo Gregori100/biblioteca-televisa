@@ -44,20 +44,20 @@
             <div v-if="showDropdown" class="dropdown-menu" :style="dropdownStyle" id="dropdownOpciones" ref="dropdownOpciones">
               <ul>
                 <li>
-                  <!-- :disabled="!permisosVista.editar" -->
                   <button
                     class="boton-en-texto"
                     @@click="abrirModalEditarUsuario()"
-                    id="opcEditar">
+                    id="opcEditar"
+                    :disabled="!permisosVista.editar">
                     <i class="icon-editar"></i>Editar
                   </button>
                 </li>
                 <li>
-                  <!-- :disabled="!permisosVista.eliminar" -->
                   <button
                     class="boton-en-texto"
                     @@click="abrirModalEliminarUsuario()"
-                    id="opcEliminar">
+                    id="opcEliminar"
+                    :disabled="!permisosVista.eliminar">
                     <i class="icon-eliminar"></i>Eliminar
                   </button>
                 </li>
@@ -106,12 +106,11 @@
           </table>
 
           <div class="row-titulo-detalle">
-            <!-- :disabled="!permisosVista.editarPassword -->
             <button
               class="boton-outline"
               id="btnCambiarContrasena"
               @@click="abrirModalEditarPassword()"
-              :disabled="usuarioObj.status == 300">
+              :disabled="!permisosVista.editarPassword || usuarioObj.status == 300">
               <i class="icon-contrasena"></i>
               Cambiar contraseña
             </button>

@@ -69,7 +69,6 @@ Route::group(['middleware' => ["no.cache", "validar.sesion"]], function () {
       Route::post('/eliminar', 'eliminar')->name('eliminar');
       Route::post('/agregar-perfil', 'agregarPerfil')->name('agregarPerfil');
       Route::post('/eliminar-perfil', 'eliminarPerfil')->name('eliminarPerfil');
-      Route::post('/editar-relacion-sucursales', 'editarRelacionSucursales')->name('editarRelacionSucursales');
       Route::post('/editar-perfil', 'editarPerfil')->name('editarPerfil');
       Route::post('/editar-permisos-perfil', 'editarPermisosPerfil')->name('editarPermisosPerfil');
     });
