@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LibroController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,29 @@ Route::group(['middleware' => ["no.cache", "validar.sesion"]], function () {
       Route::post('/editar', 'editar')->name('editar');
       Route::post('/eliminar', 'eliminar')->name('eliminar');
       Route::post('/ocupar', 'ocupar')->name('ocupar');
+    });
+  });
+
+  Route::prefix('usuarios')->name('usuarios.')->group(function () {
+    Route::controller(UsuarioController::class)->group(function () {
+      // Web
+      Route::get('/', 'gestor')->name('gestor');
+      Route::get('/{id}/{hashId}', 'detalle')->name('detalle');
+      Route::get('/perfiles', 'perfilesGestor')->name('perfilesGestor');
+      Route::get('/perfiles/{id}/{hashId}', 'detallePerfil')->name('detallePerfil');
+      Route::get('/perfiles/editar/{id}/{hashId}', 'editarPermisos')->name('editarPermisos');
+
+      // API
+      Route::get('/listar-perfiles', 'listarPerfiles')->name('listarPerfiles');
+      Route::post('/agregar', 'agregar')->name('agregar');
+      Route::post('/editar', 'editar')->name('editar');
+      Route::post('/editar-password', 'editarPassword')->name('editarPassword');
+      Route::post('/eliminar', 'eliminar')->name('eliminar');
+      Route::post('/agregar-perfil', 'agregarPerfil')->name('agregarPerfil');
+      Route::post('/eliminar-perfil', 'eliminarPerfil')->name('eliminarPerfil');
+      Route::post('/editar-relacion-sucursales', 'editarRelacionSucursales')->name('editarRelacionSucursales');
+      Route::post('/editar-perfil', 'editarPerfil')->name('editarPerfil');
+      Route::post('/editar-permisos-perfil', 'editarPermisosPerfil')->name('editarPermisosPerfil');
     });
   });
 });
