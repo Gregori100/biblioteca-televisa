@@ -465,7 +465,10 @@ class UsuarioService
 
   private static function validarAgregarPerfil($datos)
   {
-    $registrosPerfiles = self::listarPerfiles("", ["clave" => $datos["clave"]]);
+    $registrosPerfiles = self::listarPerfiles("", [
+      "clave" => $datos["clave"],
+      "status" => [UsuarioConst::PERFIL_USUARIO_STATUS_ACTIVO]
+    ]);
 
     if (!empty($registrosPerfiles)) {
       throw new Exception("La clave de perfil de acceso ya se encuentra registrada, favor de revisar. {$datos["clave"]}", 300);

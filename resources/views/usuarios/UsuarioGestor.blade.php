@@ -70,8 +70,9 @@
         </div>
       </div>
 
-      <div class="row-filtros-varios">
-        <input ref="inputMensajeAccion" type="hidden" :value="mensajeAccionGestor" v-if="mostrarMensajeAccionGestor">
+      <input ref="inputMensajeAccion" type="hidden" :value="mensajeAccionGestor" v-if="mostrarMensajeAccionGestor">
+
+      <div class="row-filtros-varios" v-if="cardFiltros">
       </div>
     </form>
     <!-- Fin filtros -->
@@ -410,6 +411,7 @@
       alertaClass: false,
       resetTiempoAlerta: false,
       loader: false,
+      cardFiltros: false,
 
       // URLs
       urlListarPerfilesUsuarios: "/usuarios/listar-perfiles",
