@@ -20,142 +20,118 @@
   <!-- Fin alerta -->
 
   <div class="encabezado">
-    <h2>Usuarios</h2>
+    <h2>Detalle de usuario</h2>
     <div class="opciones">
       <usuario-activo :usuario-logueado="usuarioLogueado" :csrf-token="csrfToken" />
     </div>
   </div>
 
   <div class="contenedor-contenido">
-    <!-- Filtros -->
-    <form
-      class="contenedor-filtros"
-      action="{{ route('usuarios.gestor') }}"
-      method="GET"
-      ref="formFiltros">
-      <div class="row-filtros-busqueda">
-        <div class="row-filtros-busqueda__input">
-          <div class="input-con-icono-contenedor">
-            <input
-              type="text"
-              placeholder="Buscar"
-              class="input-con-icono-derecha"
-              value="{{ $filtros['busqueda'] ?? '' }}"
-              name="busqueda"
-              id="inputFiltros"
-              ref="inputFiltros">
-            <span class="icono-input-derecha puntero-cursor" @@click="$refs.formFiltros.submit()" id="btnBuscarGestor">
-              <i class="icon-buscar"></i>
-            </span>
+    <div class="contenedor-detalle ancho-maximo-1156">
+      <div class="contenedor-datos-detalle">
+        <div class="detalle-datos">
+          <div class="row-titulo-detalle">
+            <h3>@{{ usuarioObj.nombreCompleto }}</h3>
+            <button
+              class="boton-opciones-puntos"
+              :class="showDropdown ? 'boton-opciones-puntos--activo' : ''"
+              @@click="toggleDropdown()"
+              ref="iconoPuntos"
+              :disabled="usuarioObj.status == 300"
+              id="btnOpciones">
+              <i class="icon-puntos"></i>
+            </button>
+            <div v-if="showDropdown" class="dropdown-menu" :style="dropdownStyle" id="dropdownOpciones" ref="dropdownOpciones">
+              <ul>
+                <li>
+                  <!-- :disabled="!permisosVista.editar" -->
+                  <button
+                    class="boton-en-texto"
+                    @@click="abrirModalEditarUsuario()"
+                    id="opcEditar">
+                    <i class="icon-editar"></i>Editar
+                  </button>
+                </li>
+                <li>
+                  <!-- :disabled="!permisosVista.eliminar" -->
+                  <button
+                    class="boton-en-texto"
+                    @@click="abrirModalEliminarUsuario()"
+                    id="opcEliminar">
+                    <i class="icon-eliminar"></i>Eliminar
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
-          <button
-            type="button"
-            class="boton-expandir-filtro"
-            @@click="window.location.href='{{ route('usuarios.gestor') }}'"
-            id="btnLimpiarFiltros">
-            <i class="icon-filtro"></i>
-            Limpiar
-          </button>
-        </div>
-        <div class="row-filtros-busqueda__opciones">
-          <button
-            type="button"
-            class="boton-agregar-filtro"
-            @@click="abrirModalAgregarUsuario()"
-            id="btnNuevoRegistro">
-            <i class="icon-agregar"></i>
-            Nuevo usuario
-          </button>
-          <!-- :disabled="!permisosVista.agregar" -->
+
+          <table class="tabla-detalle">
+            <tbody>
+              <tr>
+                <td class="w15p">Usuario</td>
+                <td class="w35p">@{{ usuarioObj.usuario }}</td>
+                <td class="w15p">Actualización</td>
+                <td class="w35p">@{{ usuarioObj.actualizacionFecha ? moment(usuarioObj.actualizacionFecha).format("DD/MM/YYYY") : '' }}</td>
+              </tr>
+              <tr>
+                <td>Nombre completo</td>
+                <td>@{{ usuarioObj.nombreCompleto }}</td>
+                <td>Autor</td>
+                <td>@{{ usuarioObj.actualizacionAutor ?? "" }}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>@{{ usuarioObj.email }}</td>
+                <td>Último acceso</td>
+                <td>@{{ usuarioObj.fechaUltimoAcceso ? moment(usuarioObj.fechaUltimoAcceso).format("DD/MM/YYYY") : '' }}</td>
+              </tr>
+              <tr>
+                <td>Perfil de acceso</td>
+                <td>@{{ usuarioObj.perfilTitulo }}</td>
+                <td>Status</td>
+                <td>
+                  <div class="status-global">
+                    <div class="status-bullet" :class="obtenerClaseStatus(usuarioObj.status)"></div>
+                    @{{ usuarioObj.statusNombre }}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Fecha registro</td>
+                <td>@{{ usuarioObj.registroFecha }}</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="row-titulo-detalle">
+            <!-- :disabled="!permisosVista.editarPassword -->
+            <button
+              class="boton-outline"
+              id="btnCambiarContrasena"
+              @@click="abrirModalEditarPassword()"
+              :disabled="usuarioObj.status == 300">
+              <i class="icon-contrasena"></i>
+              Cambiar contraseña
+            </button>
+          </div>
         </div>
       </div>
-
-      <div class="row-filtros-varios">
-        <input ref="inputMensajeAccion" type="hidden" :value="mensajeAccionGestor" v-if="mostrarMensajeAccionGestor">
-      </div>
-    </form>
-    <!-- Fin filtros -->
-
-    <div class="contenedor-grid-gestor">
-      <table class="styled-table">
-        <thead>
-          <tr>
-            <th class="w10p">Usuario</th>
-            <th class="w30p">Nombre completo</th>
-            <th class="w20p">Perfil de acceso</th>
-            <th class="w10p">Status</th>
-            <th class="w15p">Fecha registro</th>
-            <th class="w10p">Autor</th>
-            <th class="w5p texto-centrado">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="usuarios.length > 0">
-            <tr v-for="usuario in usuarios">
-              <td>
-                <a :href="'/usuarios/' + usuario.usuario_id + '/' + usuario.hash_id">
-                  @{{ usuario.usuario }}
-                </a>
-              </td>
-              <td>@{{ usuario.nombre_completo }}</td>
-              <td>@{{ usuario.perfil_titulo }}</td>
-              <td>
-                <div class="status-global">
-                  <div :class="'status-bullet '+ obtenerClaseStatus(usuario.status)"></div>
-                  @{{ capitalizarTexto(usuario.status_nombre) }}
-                </div>
-              </td>
-              <td>@{{ usuario.registro_fecha ? moment(usuario.registro_fecha).format("DD/MM/YYYY") : '' }}</td>
-              <td>@{{ usuario.registro_autor }}</td>
-              <td>
-                <div class="celda-acciones-gestor center" v-if="usuario.status == 200">
-                  <!-- v-if="permisosVista.editar" -->
-                  <button
-                    @@click="abrirModalEditarUsuario(usuario)"
-                    class="boton-en-texto"
-                    :id="'id-editar-' + usuario.usuario_id"
-                    title="Editar usuario"
-                    :disabled="usuario.status != 200">
-                    <i class="icon-editar"></i>
-                  </button>
-                  <!-- v-if="permisosVista.eliminar" -->
-                  <button
-                    @@click="abrirModalEliminarUsuario(usuario)"
-                    class="boton-en-texto"
-                    :id="'id-eliminar-' + usuario.usuario_id"
-                    title="Eliminar usuario"
-                    :disabled="usuario.status != 200">
-                    <i class="icon-eliminar"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </template>
-          <template v-else>
-            <tr>
-              <td colspan="7">
-                <div class="texto-centrado">
-                  No se encuentra ningún usuario
-                </div>
-              </td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
     </div>
   </div>
 
   <!-- MODALES -->
-  <!-- COMIENZA MODAL AGREGAR USUARIO -->
+  <!-- COMIENZA MODAL EDITAR USUARIO -->
   <template>
-    <div v-if="modalAgregarUsuario" class="modal" id="modalAgregarUsuario">
-      <div class="modal-card" id="modalCardAgregarUsuario">
+    <div v-if="modalEditarUsuario" class="modal" id="modalEditarUsuario">
+      <div class="modal-card" id="modalCardEditarUsuario">
         <div class="modal-header">
-          <label>Nuevo usuario</label>
-          <i @@click="cerrarModalAgregarUsuario" class="icon-cerrar" id="btnCerrarModalAgregarUsuario"></i>
+          <label>Editar usuario</label>
+          <i @@click="cerrarModalEditarUsuario" class="icon-cerrar"></i>
         </div>
         <div class="modal-body">
-          <form id="formAgregarUsuario" ref="formAgregarUsuario" @@submit.prevent="agregarUsuario()">
+          <form id="formEditarUsuario" ref="formEditarUsuario" @@submit.prevent="editarUsuario()">
             @csrf
             <div class="input-row">
               <label class="requerido">Usuario</label>
@@ -165,7 +141,7 @@
                 required
                 maxlength="20"
                 autocomplete="new-password"
-                v-model.trim="usuarioObj.usuario"
+                v-model.trim="usuarioEditarObj.usuario"
                 ref="usuarioInput"
                 id="inputUsuario">
             </div>
@@ -178,7 +154,7 @@
                 required
                 maxlength="100"
                 autocomplete="new-password"
-                v-model.trim="usuarioObj.nombreCompleto"
+                v-model.trim="usuarioEditarObj.nombreCompleto"
                 id="inputNombreCompleto">
             </div>
 
@@ -190,18 +166,49 @@
                 maxlength="200"
                 required
                 autocomplete="new-password"
-                v-model.trim="usuarioObj.email"
+                v-model.trim="usuarioEditarObj.email"
                 id="inputEmail">
             </div>
 
             <div class="input-row">
               <label class="requerido">Perfil</label>
-              <select v-model="usuarioObj.perfilId" required>
+              <select v-model="usuarioEditarObj.perfilId" required>
                 <option :value="null" disabled>Selecciona una opción</option>
                 <option :value="perfil.perfil_id" v-for="perfil in perfilesUsuarios">@{{ perfil.titulo }}</option>
               </select>
             </div>
+          </form>
+        </div>
+        <div class="modal-footer center">
+          <button
+            class="boton-aceptar boton--plata"
+            @@click="cerrarModalEditarUsuario()"
+            id="btnCancelarAgregar">
+            Cancelar</button>
+          <button
+            type="submit"
+            class="boton-aceptar"
+            form="formEditarUsuario"
+            id="btnGuardarAgregar">
+            Guardar</button>
+        </div>
+      </div>
+      <div class="modal-background"></div>
+    </div>
+  </template>
+  <!-- TERMINA MODAL EDITAR USUARIO -->
 
+  <!-- COMIENZA MODAL CAMBIAR CONTRASEÑA -->
+  <template>
+    <div v-if="modalEditarPassword" class="modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <label>Cambiar contraseña</label>
+          <i @@click="cerrarModalEditarPassword" class="icon-cerrar"></i>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarPassword" ref="formEditarPassword" @@submit.prevent="editarPassword()">
+            @csrf
             <div class="input-password">
               <div>
                 <label class="requerido">Contraseña</label>
@@ -217,10 +224,11 @@
                   required
                   maxlength="25"
                   @@input="validarPassword"
-                  v-model.trim="usuarioObj.password"
+                  v-model.trim="usuarioEditarObj.password"
                   onkeypress="noSpaces(event)"
                   id="inputPasswordAgregar"
-                  autocomplete="new-password">
+                  autocomplete="new-password"
+                  ref="passwordInput">
                 <i
                   class="icon-visualizacion-cerrada copiar puntero-cursor"
                   @@click="verPassword = !verPassword"
@@ -255,91 +263,15 @@
         <div class="modal-footer center">
           <button
             class="boton-aceptar boton--plata"
-            @@click="cerrarModalAgregarUsuario()"
+            @@click="cerrarModalEditarPassword()"
             id="btnCancelarAgregar">
             Cancelar</button>
           <button
             type="submit"
             class="boton-aceptar"
-            form="formAgregarUsuario"
-            id="btnGuardarAgregar"
+            form="formEditarPassword"
+            id="btnGuardar"
             :disabled="!(reglas.every(rule => rule.valid) && seguridad >= 50)">
-            Guardar</button>
-        </div>
-      </div>
-      <div class="modal-background"></div>
-    </div>
-  </template>
-  <!-- TERMINA MODAL AGREGAR USUARIO -->
-
-  <!-- COMIENZA MODAL EDITAR USUARIO -->
-  <template>
-    <div v-if="modalEditarUsuario" class="modal" id="modalEditarUsuario">
-      <div class="modal-card" id="modalCardEditarUsuario">
-        <div class="modal-header">
-          <label>Editar usuario</label>
-          <i @@click="cerrarModalEditarUsuario" class="icon-cerrar"></i>
-        </div>
-        <div class="modal-body">
-          <form id="formEditarUsuario" ref="formEditarUsuario" @@submit.prevent="editarUsuario()">
-            @csrf
-            <div class="input-row">
-              <label class="requerido">Usuario</label>
-              <input
-                type="text"
-                placeholder="Usuario"
-                required
-                maxlength="20"
-                autocomplete="new-password"
-                v-model.trim="usuarioObj.usuario"
-                ref="usuarioInput"
-                id="inputUsuario">
-            </div>
-
-            <div class="input-row">
-              <label class="requerido">Nombre completo</label>
-              <input
-                type="text"
-                placeholder="Nombre completo"
-                required
-                maxlength="100"
-                autocomplete="new-password"
-                v-model.trim="usuarioObj.nombreCompleto"
-                id="inputNombreCompleto">
-            </div>
-
-            <div class="input-row">
-              <label class="requerido">Email</label>
-              <input
-                type="email"
-                placeholder="Email"
-                maxlength="200"
-                required
-                autocomplete="new-password"
-                v-model.trim="usuarioObj.email"
-                id="inputEmail">
-            </div>
-
-            <div class="input-row">
-              <label class="requerido">Perfil</label>
-              <select v-model="usuarioObj.perfilId" required>
-                <option :value="null" disabled>Selecciona una opción</option>
-                <option :value="perfil.perfil_id" v-for="perfil in perfilesUsuarios">@{{ perfil.titulo }}</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer center">
-          <button
-            class="boton-aceptar boton--plata"
-            @@click="cerrarModalEditarUsuario()"
-            id="btnCancelarAgregar">
-            Cancelar</button>
-          <button
-            type="submit"
-            class="boton-aceptar"
-            form="formEditarUsuario"
-            id="btnGuardarAgregar">
             Guardar</button>
         </div>
       </div>
@@ -362,7 +294,7 @@
           <p>¿Estás seguro que deseas eliminar el siguiente usuario?</p>
           <p class="mb-8">Esta acción no se puede deshacer.</p>
 
-          <p class="subtitulo-modal">@{{ usuarioObj.nombreCompleto }}</p>
+          <p class="subtitulo-modal">@{{ usuarioEditarObj.nombreCompleto }}</p>
         </div>
         <div class="modal-footer center no-border">
           <button
@@ -394,10 +326,19 @@
 <script id="mensajeAccion" type="application/json">
   @json($mensajeAccion)
 </script>
+<script id="hashId" type="application/json">
+  @json($hashId)
+</script>
 
 <!-- VARIABLES -->
-<script id="usuarios" type="application/json">
-  @json($usuarios)
+<script id="usuarioObj" type="application/json">
+  @json($usuarioObj)
+</script>
+<script id="sucursales" type="application/json">
+  @json($sucursales)
+</script>
+<script id="sucursalesRelacionadas" type="application/json">
+  @json($sucursalesRelacionadas)
 </script>
 
 <script>
@@ -411,25 +352,27 @@
       resetTiempoAlerta: false,
       loader: false,
 
+      // Dropdown opciones detalle
+      showDropdown: false,
+      dropdownStyle: {},
+
       // URLs
-      urlListarPerfilesUsuarios: "/usuarios/listar-perfiles",
-      urlAgregarUsuario: "/usuarios/agregar",
       urlEditarUsuario: "/usuarios/editar",
+      urlEditarPasswordUsuario: "/usuarios/editar-password",
       urlEliminarUsuario: "/usuarios/eliminar",
       urlUsuariosGestor: "/usuarios",
+      urlListarPerfilesUsuarios: "/usuarios/listar-perfiles",
+      urlEditarRelacionSucursales: "/usuarios/editar-relacion-sucursales",
 
       usuarioLogueado: JSON.parse(document.getElementById('usuarioLogueado').textContent),
       permisosVista: JSON.parse(document.getElementById('permisosVista').textContent),
       mensajeAccion: JSON.parse(document.getElementById('mensajeAccion').textContent),
-      usuarios: JSON.parse(document.getElementById('usuarios').textContent),
+      usuarioObj: JSON.parse(document.getElementById('usuarioObj').textContent),
+      sucursales: JSON.parse(document.getElementById('sucursales').textContent),
+      sucursalesRelacionadas: JSON.parse(document.getElementById('sucursalesRelacionadas').textContent),
+      hashId: JSON.parse(document.getElementById('hashId').textContent),
 
-      filtros: {
-        busqueda: ""
-      },
-
-      // Data
-      perfilesUsuarios: [],
-      usuarioObj: {
+      usuarioEditarObj: {
         usuarioId: null,
         usuario: null,
         nombreCompleto: null,
@@ -438,9 +381,13 @@
         perfilId: null,
       },
 
+      // Data
+      perfilesUsuarios: [],
+      relacionarSucursales: false,
+
       // Modales
-      modalAgregarUsuario: false,
       modalEditarUsuario: false,
+      modalEditarPassword: false,
       modalEliminarUsuario: false,
 
       // Password
@@ -472,14 +419,14 @@
       verPassword: '',
       seguridad: 0,
       colorSeguridad: '',
-
-      // Mensaje accion gestor
-      mensajeAccionGestor: "",
-      mostrarMensajeAccionGestor: false,
     },
+    beforeDestroy() {
+      // Evento para cerrar opcion 3 puntos
+      window.removeEventListener('click', this.handleClickOutside);
+    },
+    computed: {},
     async mounted() {
-      this.cargaInicial();
-      this.cargaGestor();
+      this.cargaInicial()
     },
     methods: {
       cargaInicial() {
@@ -506,10 +453,16 @@
         if ("{{ Session::get('error') }}" != "") {
           this.mostrarAlerta("alerta-error", "{{ Session::get('error') }}");
         }
+
+        // Listener para cerrar opcion 3 puntos
+        window.addEventListener('click', this.handleClickOutside);
       },
-      cargaGestor() {
-        this.$refs.inputFiltros.focus();
+      handleClickOutside(event) {
+        if (this.showDropdown && !this.$refs.iconoPuntos.contains(event.target) && !this.$refs.dropdownOpciones.contains(event.target)) {
+          this.toggleDropdown();
+        }
       },
+      // Alerta
       mostrarAlerta(tipoAlerta, mensajeAlerta) {
         this.alertaMensaje = mensajeAlerta
         this.alertaClass = tipoAlerta;
@@ -518,6 +471,22 @@
       },
       ocultarAlerta() {
         this.showAlerta = false;
+      },
+
+      toggleDropdown() {
+        this.showDropdown = !this.showDropdown;
+        if (this.showDropdown) {
+          this.setPosition();
+        }
+      },
+      setPosition() {
+        const icono = this.$refs.iconoPuntos;
+        const rect = icono.getBoundingClientRect();
+        this.dropdownStyle = {
+          top: `${36}px`,
+          right: `${0}px`,
+          position: 'absolute'
+        };
       },
 
       // Listado
@@ -540,7 +509,7 @@
       },
 
       limpiarUsuariObj() {
-        this.usuarioObj = {
+        this.usuarioEditarObj = {
           usuarioId: null,
           usuario: null,
           nombreCompleto: null,
@@ -552,62 +521,20 @@
         this.perfilesUsuarios = [];
       },
 
-      // Agregar usuario
-      async abrirModalAgregarUsuario() {
-        await this.reiniciarValidacionesPassword();
-        await this.listarPerfilesUsuarios()
-        this.modalAgregarUsuario = await true;
-
-        this.$nextTick(() => {
-          this.$refs.usuarioInput.focus();
-        });
-      },
-      cerrarModalAgregarUsuario() {
-        this.modalAgregarUsuario = false;
-
-        this.limpiarUsuariObj();
-      },
-      async agregarUsuario() {
-        if (this.loader) return;
-
-        if (!validarEmail(this.usuarioObj.email)) {
-          this.mostrarAlerta("alerta-error", "Formato de email incorrecto, favor de corregirlo");
-          return;
-        }
-
-        this.loader = true;
-        await axios.post(this.urlAgregarUsuario, this.usuarioObj)
-          .then((response) => {
-            let data = response.data;
-
-            if (data.codigo != 200) {
-              throw data.mensaje
-            }
-
-            let id = data.data.usuarioId;
-            let hashId = data.data.hashId;
-
-            window.location.href = `${this.urlUsuariosGestor}/${id}/${hashId}`
-            this.loader = false;
-          })
-          .catch((error) => {
-            this.mostrarAlerta("alerta-error", error);
-            this.loader = false;
-          });
-      },
-
       // Editar usuario
-      async abrirModalEditarUsuario(usuario) {
-        this.usuarioObj = {
-          usuarioEditadoId: usuario.usuario_id,
-          usuario: usuario.usuario,
-          nombreCompleto: usuario.nombre_completo,
-          email: usuario.email,
-          perfilId: usuario.perfil_id,
+      async abrirModalEditarUsuario() {
+        this.usuarioEditarObj = {
+          usuarioEditadoId: this.usuarioObj.usuarioId,
+          usuario: this.usuarioObj.usuario,
+          nombreCompleto: this.usuarioObj.nombreCompleto,
+          email: this.usuarioObj.email,
+          perfilId: this.usuarioObj.perfilId,
         }
 
         await this.listarPerfilesUsuarios()
         this.modalEditarUsuario = await true;
+
+        this.toggleDropdown();
 
         this.$nextTick(() => {
           this.$refs.usuarioInput.focus();
@@ -615,24 +542,23 @@
       },
       cerrarModalEditarUsuario() {
         this.modalEditarUsuario = false;
-
         this.limpiarUsuariObj();
       },
       async editarUsuario() {
-        if (this.usuarioObj.perfilId == "" || this.usuarioObj.perfilId == null) {
+        if (this.usuarioEditarObj.perfilId == "" || this.usuarioEditarObj.perfilId == null) {
           this.mostrarAlerta("alerta-error", "Selecciona un perfil para el usuario");
           return;
         }
 
         if (this.loader) return;
 
-        if (!validarEmail(this.usuarioObj.email)) {
+        if (!validarEmail(this.usuarioEditarObj.email)) {
           this.mostrarAlerta("alerta-error", "Formato de email incorrecto, favor de corregirlo");
           return;
         }
 
         this.loader = true;
-        await axios.post(this.urlEditarUsuario, this.usuarioObj)
+        await axios.post(this.urlEditarUsuario, this.usuarioEditarObj)
           .then((response) => {
             let data = response.data;
 
@@ -640,15 +566,7 @@
               throw data.mensaje
             }
 
-            // Mensaje acción
-            this.mostrarMensajeAccionGestor = true;
-            this.mensajeAccionGestor = "editar";
-            this.$nextTick(() => {
-              this.$refs.inputMensajeAccion.name = "exito";
-              this.$refs.formFiltros.submit()
-            });
-
-            // this.$refs.formFiltros.submit()
+            window.location.href = `${this.urlUsuariosGestor}/${this.usuarioObj.usuarioId}/${this.hashId}?exito=editar`
             // this.loader = false;
           })
           .catch((error) => {
@@ -657,14 +575,54 @@
           });
       },
 
+      // Editar contraseña usuario
+      async abrirModalEditarPassword() {
+        this.usuarioEditarObj = {
+          usuarioEditadoId: this.usuarioObj.usuarioId,
+          password: null,
+        }
+
+        this.modalEditarPassword = true;
+
+        this.$nextTick(() => {
+          this.$refs.passwordInput.focus();
+        });
+      },
+      cerrarModalEditarPassword() {
+        this.modalEditarPassword = false;
+
+        this.limpiarUsuariObj();
+      },
+      async editarPassword() {
+        if (this.loader) return;
+
+        this.loader = true;
+        await axios.post(this.urlEditarPasswordUsuario, this.usuarioEditarObj)
+          .then((response) => {
+            let data = response.data;
+
+            if (data.codigo != 200) {
+              throw data.mensaje
+            }
+
+            window.location.href = `${this.urlUsuariosGestor}/${this.usuarioObj.usuarioId}/${this.hashId}?exito=editarContrena`
+          })
+          .catch((error) => {
+            this.mostrarAlerta("alerta-error", error);
+            this.loader = false;
+          });
+      },
+
       // Eliminar usuario
-      async abrirModalEliminarUsuario(usuario) {
-        this.usuarioObj = {
-          usuarioEditadoId: usuario.usuario_id,
-          nombreCompleto: usuario.nombre_completo,
-          usuario: usuario.usuario,
+      async abrirModalEliminarUsuario() {
+        this.usuarioEditarObj = {
+          usuarioEditadoId: this.usuarioObj.usuarioId,
+          nombreCompleto: this.usuarioObj.nombreCompleto,
+          usuario: this.usuarioObj.usuario,
         }
         this.modalEliminarUsuario = await true;
+
+        this.toggleDropdown();
       },
       cerrarModalEliminarUsuario() {
         this.modalEliminarUsuario = false;
@@ -674,7 +632,7 @@
         if (this.loader) return;
 
         this.loader = true;
-        await axios.post(this.urlEliminarUsuario, this.usuarioObj)
+        await axios.post(this.urlEliminarUsuario, this.usuarioEditarObj)
           .then((response) => {
             let data = response.data;
 
@@ -682,16 +640,35 @@
               throw data.mensaje
             }
 
-            // Mensaje acción
-            this.mostrarMensajeAccionGestor = true;
-            this.mensajeAccionGestor = "eliminar";
-            this.$nextTick(() => {
-              this.$refs.inputMensajeAccion.name = "exito";
-              this.$refs.formFiltros.submit()
-            });
+            window.location.href = `${this.urlUsuariosGestor}/${this.usuarioObj.usuarioId}/${this.hashId}?exito=eliminar`
+            this.loader = false;
+          })
+          .catch((error) => {
+            this.mostrarAlerta("alerta-error", error);
+            this.loader = false;
+          });
+      },
 
-            // this.$refs.formFiltros.submit()
-            // this.loader = false;
+      // Relacción sucursales
+      async editarRelacionSucursales() {
+        if (this.loader) return;
+
+        let form = new FormData();
+        form.append('usuarioEditadoId', this.usuarioObj.usuarioId);
+        form.append('sucursales', JSON.stringify(this.sucursales));
+
+        this.loader = true;
+        await axios.post(this.urlEditarRelacionSucursales, form)
+          .then((response) => {
+            let data = response.data;
+
+            if (data.codigo != 200) {
+              throw data.mensaje
+            }
+
+            window.location.href = `${this.urlUsuariosGestor}/${this.usuarioObj.usuarioId}/${this.hashId}?exito=eliminarRelSucursal`
+
+            this.loader = false;
           })
           .catch((error) => {
             this.mostrarAlerta("alerta-error", error);
@@ -702,14 +679,14 @@
       // Métodos del password
       validarPassword() {
         // Usar zxcvbn para evaluar la fortaleza de la contraseña
-        this.passwordStrength = zxcvbn(this.usuarioObj.password);
+        this.passwordStrength = zxcvbn(this.usuarioEditarObj.password);
 
         // Actualizar las reglas de validación
-        this.reglas[0].valid = this.usuarioObj.password.length >= 8;
-        this.reglas[1].valid = /[A-Z]/.test(this.usuarioObj.password);
-        this.reglas[2].valid = /[a-z]/.test(this.usuarioObj.password);
-        this.reglas[3].valid = /\d/.test(this.usuarioObj.password);
-        this.reglas[4].valid = /[!@#$%^&*(),.?":{}|<>/]/.test(this.usuarioObj.password);
+        this.reglas[0].valid = this.usuarioEditarObj.password.length >= 8;
+        this.reglas[1].valid = /[A-Z]/.test(this.usuarioEditarObj.password);
+        this.reglas[2].valid = /[a-z]/.test(this.usuarioEditarObj.password);
+        this.reglas[3].valid = /\d/.test(this.usuarioEditarObj.password);
+        this.reglas[4].valid = /[!@#$%^&*(),.?":{}|<>/]/.test(this.usuarioEditarObj.password);
 
         if (this.passwordStrength.score == 0 || this.passwordStrength.score == 1) {
           this.seguridad = 33;
@@ -721,17 +698,17 @@
           this.seguridad = 100;
           this.colorSeguridad = 'verde';
         }
-        if (this.usuarioObj.password == '') {
+        if (this.usuarioEditarObj.password == '') {
           this.seguridad = 0;
         }
       },
       generarPassword() {
-        this.usuarioObj.password = generarPasswordSegura(12);
+        this.usuarioEditarObj.password = generarPasswordSegura(12);
         this.validarPassword();
-        navigator.clipboard.writeText(this.usuarioObj.password);
+        navigator.clipboard.writeText(this.usuarioEditarObj.password);
       },
       reiniciarValidacionesPassword() {
-        this.usuarioObj.password = '';
+        this.usuarioEditarObj.password = '';
         this.passwordStrength = {
           score: 0
         };
@@ -759,7 +736,7 @@
             message: 'Al menos un caracter especial'
           }
         ];
-      }
+      },
     }
   })
 </script>
