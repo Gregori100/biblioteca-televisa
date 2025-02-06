@@ -11,6 +11,7 @@
       <p>Inicio</p>
     </a>
 
+    @if(!$usuarioLogueado->global || in_array('biblioteca.usuarios.agregar', $usuarioLogueado->permisosArray))
     <a
       class="
         {{ request()->routeIs('usuarios.*')
@@ -23,7 +24,9 @@
       <i class="icon-usuario" id="iconHomeSidebar"></i>
       <p>Usuarios</p>
     </a>
+    @endif
 
+    @if(!$usuarioLogueado->global || in_array('biblioteca.perfiles.agregar', $usuarioLogueado->permisosArray))
     <a
       class="{{ request()->routeIs(
       'usuarios.perfilesGestor',
@@ -36,5 +39,6 @@
       <i class="icon-usuarios" id="iconHomeSidebar"></i>
       <p>Perfiles</p>
     </a>
+    @endif
   </div>
 </div>

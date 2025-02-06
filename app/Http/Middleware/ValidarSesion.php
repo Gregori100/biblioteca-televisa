@@ -81,6 +81,7 @@ class ValidarSesion
     $permisosVista = PermisoService::obtenerPermisosVista($permisosUsuario, $routeName);
 
     // Se comparte usuario a todas las vistas blade
+    $usuarioObj->permisosArray = json_decode($usuarioObj->permisos);
     View::share('usuarioLogueado', $usuarioObj);
     View::share('permisosVista', $permisosVista);
 
