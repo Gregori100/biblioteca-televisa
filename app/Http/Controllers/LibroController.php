@@ -360,6 +360,7 @@ class LibroController extends Controller
         "busquedaIsbn"         => $datos["busquedaIsbn"] ?? null,
         "statusDisponibilidad" => $datos["statusDisponibilidad"] ?? [],
         "libroId"              => $datos["libroId"] ?? null,
+        "ocupar"               => $datos["ocupar"] ?? 0,
       ];
       $order = ["folio_asc"];
 

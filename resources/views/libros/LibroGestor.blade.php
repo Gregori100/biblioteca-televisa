@@ -1097,8 +1097,8 @@
     },
     async mounted() {
       this.cargaInicial();
-      this.cargarFiltros();
       this.cargaGestor();
+      this.cargarFiltros();
     },
     methods: {
       cargaInicial() {
@@ -1130,7 +1130,6 @@
         // Setear registros
         // this.libros = this.datosGestor.registros;
         this.libros = this.datosGestor;
-        console.log(this.libros);
 
         this.$refs.inputFiltros.focus();
       },
@@ -1153,6 +1152,11 @@
           this.filtros.statusDisponibilidad = this.filtrosURL.statusDisponibilidad[0];
         } else {
           this.filtros.statusDisponibilidad = undefined
+        }
+
+        // Abrir modal de ocupar libro
+        if(this.filtrosURL.ocupar === "1" && this.libros.length == 1){
+          this.abrirModalOcuparLibro(this.libros[0]);
         }
       },
       async toggleFiltros() {
@@ -1390,7 +1394,6 @@
         await axios.get(this.urlListarGeneros, data)
           .then((response) => {
             this.generos = response.data.data ?? [];
-            console.log(this.generos);
           })
           .catch((error) => {
             this.mostrarAlerta("alerta-error", error)
@@ -1436,7 +1439,6 @@
         await axios.get(this.urlListarIdiomas, data)
           .then((response) => {
             this.idiomas = response.data.data ?? [];
-            console.log(this.idiomas);
           })
           .catch((error) => {
             this.mostrarAlerta("alerta-error", error)
@@ -1609,9 +1611,6 @@
             if (data.codigo != 200) {
               throw data.mensaje;
             }
-
-            console.log(data);
-
 
             let archivo = data.data;
 
