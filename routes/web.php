@@ -49,6 +49,7 @@ Route::group(['middleware' => ["no.cache", "validar.sesion"]], function () {
       Route::post('/editar', 'editar')->name('editar');
       Route::post('/eliminar', 'eliminar')->name('eliminar');
       Route::post('/ocupar', 'ocupar')->name('ocupar');
+      Route::get('/descargar-codigo-qr', 'descargarCodigoQr')->name('descargarCodigoQr');
     });
   });
 
