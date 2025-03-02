@@ -12,14 +12,6 @@
   {{-- VUE --}}
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 
-  {{-- CROPPIE --}}
-  <link rel="stylesheet" href="{{ env('APP_URL') }}/css/croppie.css" />
-  <script src="{{ env('APP_URL') }}/js/croppie.js"></script>
-
-  {{-- CROPPER --}}
-  <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
-
   {{-- DECIMAL --}}
   <script src="https://cdn.jsdelivr.net/npm/decimal.js@10.3.1/decimal.min.js"></script>
 
