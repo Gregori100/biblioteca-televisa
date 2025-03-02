@@ -300,6 +300,37 @@ class LibroController extends Controller
     }
   }
 
+  /**
+   * Método para descargar codigo qr de un libro
+   * @param Request $request
+   * @return response
+   */
+  public function descargarCodigoQr(Request $request)
+  {
+    try {
+      $datos = $request->all();
+
+      $validator = Validator::make($datos, [
+        'libroId' => 'required',
+      ]);
+
+      if ($validator->stopOnFirstFailure()->fails()) {
+        throw new ValidacionException(TextoUtils::obtenerMensajesValidator($validator->getMessageBag()));
+      }
+
+      $respuesta = LibroService::descargarCodigoQr($datos["libroId"]);
+
+      return response(
+        ApiResponse::build(CodigoRes::EXITO, "Código descargado correctamente.", $respuesta)
+      );
+    } catch (ValidacionException $e) {
+      return response(ApiResponse::build(CodigoRes::ERROR, $e->getMessage()));
+    } catch (Exception $e) {
+      TextoUtils::agregarLogError($e, "LibroController::descargarCodigoQr()");
+      return response(ApiResponse::build(CodigoRes::ERROR, $e->getMessage()));
+    }
+  }
+
   /********************************************************************/
   /******************************* WEB ********************************/
   /********************************************************************/
@@ -328,6 +359,7 @@ class LibroController extends Controller
         "busquedaIdioma"       => $datos["busquedaIdioma"] ?? null,
         "busquedaIsbn"         => $datos["busquedaIsbn"] ?? null,
         "statusDisponibilidad" => $datos["statusDisponibilidad"] ?? [],
+        "libroId"              => $datos["libroId"] ?? null,
       ];
       $order = ["folio_asc"];
 

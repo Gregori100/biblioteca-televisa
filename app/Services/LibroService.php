@@ -10,7 +10,10 @@ use App\Repositories\Data\LibroRepoData;
 use App\Services\BO\LibroBO;
 use App\Utilerias\HashUtils;
 use App\Utilerias\TextoUtils;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 use stdClass;
 
 class LibroService
@@ -213,6 +216,52 @@ class LibroService
     // $datosGestor->lastPage    = $registrosLibros->lastPage();
 
     // return $datosGestor;
+  }
+
+  /**
+   * Método que descarga codigo qr de libro
+   * @param string $libroId
+   * @return stdClass
+   */
+  public static function descargarCodigoQr($libroId)
+  {
+    // Obtener Obj libro
+    $libroObj = self::obtenerLibro($libroId, false);
+
+    // Generar URL
+    $ip  = env("APP_URL");;
+    $url = "http://{$ip}/libros?busqueda={$libroObj->getFolio()}&libroId={$libroObj->getLibroId()}&ocupar=1";
+
+    // Verificar si la carpeta "temp" no existe y crearla si es necesario
+    if (!Storage::disk('public')->exists("temp")) {
+      Storage::disk('public')->makeDirectory("temp");
+    }
+
+    $archivo = new stdClass();
+
+    try {
+      // Crear el código QR
+      $qrCode = new QrCode($url);
+
+      // Escribir la imagen QR en formato PNG
+      $writer = new PngWriter();
+      $result = $writer->write($qrCode);
+
+      // Guardar el QR temporalmente
+      $tempQrPath = storage_path("app/public/temp/temp_qr_{$libroObj->getFolio()}.png");
+      $result->saveToFile($tempQrPath);
+
+      // Armar retono
+      $archivo->base64    = base64_encode(file_get_contents($tempQrPath));
+      $archivo->nombre    = $libroObj->getFolio() . ".png";
+      $archivo->extension = "png";
+
+      unlink($tempQrPath);
+    } catch (Exception $e) {
+      TextoUtils::agregarLogError($e, "LibroService::descargarCodigoQr()");
+    }
+
+    return $archivo;
   }
 
   /********************************************************************/
