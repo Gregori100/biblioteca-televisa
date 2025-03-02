@@ -1155,7 +1155,7 @@
         }
 
         // Abrir modal de ocupar libro
-        if(this.filtrosURL.ocupar === "1" && this.libros.length == 1){
+        if(this.filtrosURL.ocupar === "1" && this.libros.length == 1 && this.libros[0].statusDisponibilidad == "DISPONIBLE"){
           this.abrirModalOcuparLibro(this.libros[0]);
         }
       },
