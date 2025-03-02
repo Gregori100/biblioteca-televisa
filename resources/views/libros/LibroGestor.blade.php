@@ -183,6 +183,14 @@
             <tr v-for="libro in libros">
               <td>
                 <div class="celda-acciones-gestor center" v-if="libro.status == 200">
+                  <!-- v-if="permisosVista.editar" -->
+                  <button
+                    @@click="descargarCodigoQR(libro)"
+                    class="boton-en-texto"
+                    :id="'id-qr-' + libro.libroId"
+                    title="Descargar QR">
+                    <i class="icon-descargar"></i>
+                  </button>
                   <button
                     v-if="permisosVista.editar"
                     @@click="abrirModalEditarLibro(libro)"
@@ -190,7 +198,7 @@
                     :id="'id-editar-' + libro.libroId"
                     title="Editar"
                     :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
-                    <i class="icon-editar accionEditar"></i>
+                    <i class="icon-editar"></i>
                   </button>
                   <button
                     class="boton-en-texto"
@@ -198,7 +206,7 @@
                     :id="'id-ocupar-' + libro.libroId"
                     title="Ocupar"
                     :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
-                    <i class="icon-calendario accionOcupar"></i>
+                    <i class="icon-calendario"></i>
                   </button>
                   <button
                     v-if="permisosVista.eliminar"
@@ -207,7 +215,7 @@
                     :id="'id-eliminar-' + libro.libroId"
                     title="Eliminar"
                     :disabled="libro.statusDisponibilidad != 'DISPONIBLE'">
-                    <i class="icon-eliminar accionEliminar"></i>
+                    <i class="icon-eliminar"></i>
                   </button>
                 </div>
               </td>
@@ -1016,6 +1024,7 @@
       urlLibroEditar: "/libros/editar",
       urlLibrosEliminar: "/libros/eliminar",
       urlLibrosOcupar: "/libros/ocupar",
+      urlDescargarCodigoQR: "/libros/descargar-codigo-qr",
 
       // Variables vista
       usuarioLogueado: JSON.parse(document.getElementById('usuarioLogueado').textContent),
@@ -1577,6 +1586,52 @@
           })
           .catch((error) => {
             this.mostrarAlerta("alerta-error", error);
+            this.loader = false;
+          });
+      },
+
+      /************************************************************/
+      /******************* Descargar codigo QR ********************/
+      /************************************************************/
+      async descargarCodigoQR(libro) {
+        if (this.loader) return;
+
+        let data = {
+          params: {
+            libroId: libro.libroId
+          }
+        };
+
+        this.loader = true;
+        await axios.get(this.urlDescargarCodigoQR, data)
+          .then((resp) => {
+            let data = resp.data;
+            if (data.codigo != 200) {
+              throw data.mensaje;
+            }
+
+            console.log(data);
+
+
+            let archivo = data.data;
+
+            let extension = archivo.extension;
+            let base64 = archivo.base64;
+            let nombre = archivo.nombre;
+            let linkSource = `data:application/${extension};base64,${base64}`;
+
+            let downloadLink = document.createElement("a");
+            let fileName = nombre;
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+
+            this.mostrarAlerta("alerta-exito", "Código descargado correctamente");
+          })
+          .catch((error) => {
+            this.mostrarAlerta("alerta-error", error);
+          })
+          .then(() => {
             this.loader = false;
           });
       },
