@@ -4,6 +4,10 @@ namespace App\Constantes;
 
 class UsuarioConst
 {
+  // Usuario procesos automaticos
+  const USUARIO_PROCESOS_AUTOMATICOS = 1;
+
+  // Status usuario
   const USUARIO_STATUS_ACTIVO    = 200;
   const USUARIO_STATUS_ELIMINADO = 300;
 
