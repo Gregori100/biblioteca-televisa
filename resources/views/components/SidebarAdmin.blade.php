@@ -1,0 +1,44 @@
+<div class="sidebar">
+  <div class="logo-2">
+  </div>
+  <div class="menus">
+    <a
+      class="{{ request()->routeIs('libros-admin') ? 'boton active' : 'boton' }}"
+      href="{{ route('librosAdmin.gestor') }}"
+      id="linkHomeSidebar"
+      title="Inicio">
+      <i class="icon-inicio" id="iconHomeSidebar"></i>
+      <p>Inicio</p>
+    </a>
+
+    @if(!$usuarioLogueado->global || in_array('biblioteca.usuarios.agregar', $usuarioLogueado->permisosArray))
+    <a
+      class="
+        {{ request()->routeIs('usuarios.*')
+        && !request()->routeIs('usuarios.perfiles*')
+        && !request()->routeIs('usuarios.editarPermisos*')
+        && !request()->routeIs('usuarios.detallePerfil*') ? 'boton active' : 'boton' }}"
+      href="{{ route('usuarios.gestor') }}"
+      id="linkUsuarios"
+      title="Usuarios">
+      <i class="icon-usuario" id="iconHomeSidebar"></i>
+      <p>Usuarios</p>
+    </a>
+    @endif
+
+    @if(!$usuarioLogueado->global || in_array('biblioteca.perfiles.agregar', $usuarioLogueado->permisosArray))
+    <a
+      class="{{ request()->routeIs(
+      'usuarios.perfilesGestor',
+      'usuarios.detallePerfil',
+      'usuarios.editarPermisos'
+      ) ? 'boton active' : 'boton' }}"
+      href="{{ route('usuarios.perfilesGestor') }}"
+      id="linkPerfiles"
+      title="Perfiles">
+      <i class="icon-usuarios" id="iconHomeSidebar"></i>
+      <p>Perfiles</p>
+    </a>
+    @endif
+  </div>
+</div>
