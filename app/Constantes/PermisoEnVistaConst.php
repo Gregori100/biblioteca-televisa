@@ -6,7 +6,7 @@ class PermisoEnVistaConst
 {
   const PERMISOS_EN_VISTA = [
     // Libros
-    'libros.gestor' => [
+    'librosAdmin.gestor' => [
       'agregar'  => 'biblioteca.libros.agregar',
       'editar'   => 'biblioteca.libros.editar',
       'eliminar' => 'biblioteca.libros.eliminar',
