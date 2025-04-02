@@ -200,6 +200,15 @@ numberFormat = (monto, decimales = 0, signo = 1, coma = 1) => {
     return '$' + parteMonto.join('.');
 }
 
+const quitarMensajeExitoURL = () => {
+  if (window.location.href.includes('exito')) {
+    // Si en la URL aparece el parámetro exito, se eliminará
+    const url = new URL(window.location.href);
+    url.searchParams.delete('exito');
+    window.history.replaceState({}, '', url);
+  }
+}
+
 // Obtener status
 const obtenerClaseStatus = (status) => {
   switch (status) {

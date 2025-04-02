@@ -230,20 +230,6 @@ class TextoUtils
   }
 
   /**
-   * Utileria que genera un nano id
-   * @param integer $lenght
-   * @param string $caracteres
-   * @return string
-   */
-  public static function generarNanoId(
-    $lenght = 21,
-    $caracteres = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-  ) {
-    $client = new Client();
-    return $client->formattedId($caracteres, $lenght);
-  }
-
-  /**
    * Utileria que limpia cadena para que sea valida para nombre de archivo
    * @param string $texto
    * @return string
@@ -263,5 +249,15 @@ class TextoUtils
     $texto = strtolower($texto);
 
     return $texto;
+  }
+
+  /**
+   * Método para obtener el mensaje de un endpoint para crones
+   * @param
+   */
+  public static function obtenerMensajeLogEndpoint($mensaje)
+  {
+    $fecha      = FechaUtils::fechaActualMilisegundos();
+    return $fecha . " - " . " INFO  -->  " . $mensaje . "\n";
   }
 }

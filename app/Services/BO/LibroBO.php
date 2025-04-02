@@ -3,6 +3,7 @@
 namespace App\Services\BO;
 
 use App\Constantes\LibroConst;
+use App\Constantes\UsuarioConst;
 use App\Utilerias\FechaUtils;
 use Exception;
 
@@ -29,7 +30,7 @@ class LibroBO
     $insert["observaciones"]         = trim($datos["observaciones"]);
     $insert["status"]                = LibroConst::LIBRO_STATUS_ACTIVO;
     $insert["status_disponibilidad"] = LibroConst::LIBRO_STATUS_DISPONIBILIDAD_DISPONIBLE;
-    $insert["registro_autor_id"]     = $datos["usuarioId"] ?? null;
+    $insert["registro_autor_id"]     = $datos["usuarioId"] ?? UsuarioConst::USUARIO_PROCESOS_AUTOMATICOS;
     $insert["registro_fecha"]        = FechaUtils::fechaActual();
 
     return $insert;
@@ -59,7 +60,7 @@ class LibroBO
       $update["status_disponibilidad"] = LibroConst::LIBRO_STATUS_DISPONIBILIDAD_RETIRADO;
     }
 
-    $update["actualizacion_autor_id"]  = $datos["usuarioId"] ?? null;
+    $update["actualizacion_autor_id"]  = $datos["usuarioId"] ?? UsuarioConst::USUARIO_PROCESOS_AUTOMATICOS;
     $update["actualizacion_fecha"]     = FechaUtils::fechaActual();
 
     return $update;
@@ -84,7 +85,7 @@ class LibroBO
     }
 
     $update["status_disponibilidad"]  = $datos["nuevoStatusDisponibilidad"];
-    $update["actualizacion_autor_id"] = $datos["usuarioId"] ?? null;
+    $update["actualizacion_autor_id"] = $datos["usuarioId"] ?? UsuarioConst::USUARIO_PROCESOS_AUTOMATICOS;
     $update["actualizacion_fecha"]    = FechaUtils::fechaActual();
 
     return $update;
