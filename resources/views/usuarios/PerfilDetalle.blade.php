@@ -1,4 +1,4 @@
-@extends("layout.app")
+@extends("layout.appAdmin")
 
 @section('title', 'Detalle perfil de acceso')
 
