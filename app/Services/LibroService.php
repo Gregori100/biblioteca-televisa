@@ -13,6 +13,7 @@ use App\Utilerias\TextoUtils;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
 
@@ -229,8 +230,8 @@ class LibroService
     $libroObj = self::obtenerLibro($libroId, false);
 
     // Generar URL
-    $ip  = env("APP_URL");;
-    $url = "http://{$ip}/libros?busqueda={$libroObj->getFolio()}&libroId={$libroObj->getLibroId()}&ocupar=1";
+    $ip  = env("APP_URL");
+    $url = "{$ip}/libros?busqueda={$libroObj->getFolio()}&libroId={$libroObj->getLibroId()}&ocupar=1";
 
     // Verificar si la carpeta "temp" no existe y crearla si es necesario
     if (!Storage::disk('public')->exists("temp")) {
